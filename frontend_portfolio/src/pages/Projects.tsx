@@ -1,43 +1,27 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { useState } from 'react';
+// import React, { useState } from 'react';
 // import { motion, AnimatePresence } from 'framer-motion';
 // import { Github, X } from 'lucide-react';
 // import ProjectCard from '../components/ProjectCard';
-// import CryptoChart from '../components/CryptoDashboard'; // Import your new chart component
+// import CryptoDashboard from '../components/CryptoDashboard';
 
-// const projects = [
-//   {
-//     title: 'Institutional Crypto Monitor',
-//     company: 'Personal Portfolio',
-//     year: '2025',
-//     type: 'Full-Stack Data Engineering',
-//     description: 'A complete ELT pipeline. Extracts data via Python (GitHub Actions), stores in BigQuery, transforms with dbt, and serves live analytics via a custom Python API.',
-//     techStack: ['Python', 'FastAPI', 'BigQuery', 'dbt', 'React'],
-//     imageUrl: 'https://images.unsplash.com/photo-1642104704074-907c0698cbd9?auto=format&fit=crop&q=80&w=1000', 
-//     sourceUrl: 'https://github.com/Meresa16/crypto-etl',
-//     embedUrl: null, // <--- ADD THIS (Satisfies TypeScript)
-//     liveUrl: null,
-//   },
+// // 1. Define the Project Interface
+// export interface Project {
+//   title: string;
+//   company: string;
+//   year: string;
+//   type: string;
+//   description: string;
+//   techStack: string[];
+//   imageUrl: string;
+//   sourceUrl: string;
+//   embedUrl: string | null; // Allow null for projects without demos
+//   liveUrl: string | null;  // Allow null for internal projects
+// }
+
+// // 2. Strongly typed data array
+// const projects: Project[] = [
 //   {
 //     title: 'Financial Fraud Detection System',
 //     company: 'Wegagen Bank S.C',
@@ -46,8 +30,8 @@
 //     description: 'Developed and deployed predictive models using machine learning and statistical analysis to identify and mitigate financial fraud risks.',
 //     techStack: ['Python', 'Scikit-learn', 'SQL', 'Statistical Analysis'],
 //     imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1000',
-//     sourceUrl: '', 
-//     embedUrl: null, // <--- ADD THIS
+//     sourceUrl: '',
+//     embedUrl: null,
 //     liveUrl: null,
 //   },
 //   {
@@ -59,7 +43,7 @@
 //     techStack: ['ETL', 'Data Warehousing', 'Power BI', 'SQL', 'Data Modeling'],
 //     imageUrl: 'https://images.unsplash.com/photo-1558494949-ef526b0042a0?auto=format&fit=crop&q=80&w=1000',
 //     sourceUrl: '',
-//     embedUrl: null, // <--- ADD THIS
+//     embedUrl: null,
 //     liveUrl: null,
 //   },
 //   {
@@ -69,13 +53,14 @@
 //     type: 'Software Dev',
 //     description: 'Managed the full software development life cycle (SDLC). Developed scalable software solutions using the MERN stack.',
 //     techStack: ['ExpressJS', 'NextJS', 'MongoDB', 'Docker', 'Git'],
-//     imageUrl: '/task mgt.png', 
+//     imageUrl: '/task mgt.png',
 //     liveUrl: 'https://task-mogndb.vercel.app/login',
 //     sourceUrl: '',
-//     embedUrl: null, // <--- ADD THIS
+//     embedUrl: null,
 //   },
 // ];
 
+// // Animation Variants
 // const containerVariants = {
 //   hidden: { opacity: 0 },
 //   visible: {
@@ -84,59 +69,58 @@
 //   },
 // };
 
-// export default function Projects() {
-//   const [selectedProject, setSelectedProject] = useState(null);
+// const Projects: React.FC = () => {
+//   // Type the state to accept a Project object or null
+//   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
 //   return (
-//     <div className="container mx-auto px-6 py-20 relative">
-      
+//     <div className="container mx-auto px-4 py-20 relative">
+
 //       {/* --- SECTION 1: HEADER --- */}
-//       <motion.div 
+//       <motion.div
 //         initial={{ opacity: 0, y: -20 }}
 //         animate={{ opacity: 1, y: 0 }}
 //         transition={{ duration: 0.5 }}
-//         className="text-center mb-16"
+//         className="text-center mb-12"
 //       >
 //         <h1 className="text-4xl font-bold text-gray-800 mb-4 dark:text-white">Technical Projects</h1>
 //         <p className="text-gray-600 max-w-2xl mx-auto dark:text-gray-300">
-//           From Data Engineering pipelines to Full-Stack applications. 
+//           From Data Engineering pipelines to Full-Stack applications.
 //           Below is a <strong>Live Demo</strong> of my BigQuery integration.
 //         </p>
 //       </motion.div>
 
-//       {/* --- SECTION 2: LIVE BIGQUERY DEMO --- */}
-//       <motion.div 
+//       {/* --- SECTION 2: LIVE BIGQUERY DASHBOARD --- */}
+//       <motion.div
 //         initial={{ opacity: 0, scale: 0.95 }}
 //         animate={{ opacity: 1, scale: 1 }}
 //         transition={{ duration: 0.5, delay: 0.2 }}
-//         className="mb-20 bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-200 dark:border-gray-700"
+//         className="mb-20"
 //       >
 //         <div className="flex flex-col md:flex-row justify-between items-end mb-6">
 //           <div>
-//             <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+//             <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2 text-">
 //               <span className="relative flex h-3 w-3">
 //                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
 //                 <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
 //               </span>
-//               Live Market Data
+//               Live Market Intelligence
 //             </h2>
+
 //             <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm">
-//               This chart fetches real-time data directly from my <strong>Google BigQuery</strong> warehouse via a <strong>Python FastAPI</strong> backend.
+//               Data is continuously extracted from the <strong>Source API</strong>, transformed by <strong>dbt</strong> into a clean <strong>BigQuery</strong> warehouse, and served to the browser via a <strong>Node.js/Express</strong> backend.
 //             </p>
+
 //           </div>
-//           <div className="mt-4 md:mt-0">
-//              <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-//                Architecture: React → FastAPI → BigQuery
-//              </span>
-//           </div>
+
 //         </div>
 
-//         {/* THE CHART COMPONENT */}
-//         <CryptoChart />
+//         {/* THE ADVANCED DASHBOARD COMPONENT */}
+//         <CryptoDashboard />
 //       </motion.div>
 
 //       {/* --- SECTION 3: PROJECT GRID --- */}
-//       <motion.div 
+//       <motion.div
 //         variants={containerVariants}
 //         initial="hidden"
 //         animate="visible"
@@ -144,12 +128,13 @@
 //       >
 //         {projects.map((project, index) => (
 //           <div key={index} onClick={() => project.embedUrl && setSelectedProject(project)}>
-//              <ProjectCard project={project} />
+//             {/* Uses your custom ProjectCard component */}
+//             <ProjectCard project={project} />
 //           </div>
 //         ))}
 //       </motion.div>
 
-//       {/* --- OPTIONAL: MODAL FOR IFRAMES (If needed later) --- */}
+//       {/* --- OPTIONAL: MODAL FOR IFRAMES --- */}
 //       <AnimatePresence>
 //         {selectedProject && selectedProject.embedUrl && (
 //           <motion.div
@@ -162,14 +147,14 @@
 //               <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
 //                 <h3 className="text-xl font-bold dark:text-white">{selectedProject.title}</h3>
 //                 <div className="flex gap-2">
-//                    {selectedProject.sourceUrl && (
-//                      <a href={selectedProject.sourceUrl} target="_blank" rel="noreferrer" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-//                        <Github size={20} className="dark:text-white"/>
-//                      </a>
-//                    )}
-//                    <button onClick={() => setSelectedProject(null)} className="p-2 hover:bg-red-100 hover:text-red-600 rounded-full">
-//                      <X size={24} />
-//                    </button>
+//                   {selectedProject.sourceUrl && (
+//                     <a href={selectedProject.sourceUrl} target="_blank" rel="noreferrer" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
+//                       <Github size={20} className="dark:text-white" />
+//                     </a>
+//                   )}
+//                   <button onClick={() => setSelectedProject(null)} className="p-2 hover:bg-red-100 hover:text-red-600 rounded-full">
+//                     <X size={24} />
+//                   </button>
 //                 </div>
 //               </div>
 //               <div className="flex-1 bg-gray-100 dark:bg-black">
@@ -186,7 +171,19 @@
 //       </AnimatePresence>
 //     </div>
 //   );
-// }
+// };
+
+// export default Projects;
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -196,7 +193,7 @@ import { Github, X } from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
 import CryptoDashboard from '../components/CryptoDashboard'; 
 
-// 1. Define the Project Interface
+// --- 1. Project Interface (Must be defined here for use in both files) ---
 export interface Project {
   title: string;
   company: string;
@@ -206,45 +203,22 @@ export interface Project {
   techStack: string[];
   imageUrl: string;
   sourceUrl: string;
-  embedUrl: string | null; // Allow null for projects without demos
-  liveUrl: string | null;  // Allow null for internal projects
+  embedUrl: string | null;
+  liveUrl: string | null;
 }
 
-// 2. Strongly typed data array
+// --- 2. Data Array ---
 const projects: Project[] = [
-  {
-    title: 'Institutional Crypto Monitor',
-    company: 'Personal Portfolio',
-    year: '2025',
-    type: 'Full-Stack Data Engineering',
-    description: 'A professional financial terminal featuring a market-wide Treemap, paginated asset tables, and real-time drill-down analytics. Built with React (Recharts), Python (FastAPI), and Google BigQuery.',
-    techStack: ['Python', 'FastAPI', 'BigQuery', 'dbt', 'React', 'Recharts'],
-    imageUrl: 'https://images.unsplash.com/photo-1642104704074-907c0698cbd9?auto=format&fit=crop&q=80&w=1000', 
-    sourceUrl: 'https://github.com/Meresa16/crypto-etl',
-    embedUrl: null, 
-    liveUrl: null,
-  },
+
   {
     title: 'Financial Fraud Detection System',
     company: 'Wegagen Bank S.C',
     year: '2025 - Present',
     type: 'Data Science',
-    description: 'Developed and deployed predictive models using machine learning and statistical analysis to identify and mitigate financial fraud risks.',
-    techStack: ['Python', 'Scikit-learn', 'SQL', 'Statistical Analysis'],
+    description: 'Developed and deployed a hybrid Financial Fraud Monitoring System utilizing Rule-Based Logic and Statistical Analysis to identify and mitigate financial fraud risks.',
+    techStack: ['SQL', 'Statistical Analysis'],
     imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1000',
     sourceUrl: '', 
-    embedUrl: null,
-    liveUrl: null,
-  },
-  {
-    title: 'Enterprise Data Warehouse & ETL',
-    company: 'Wegagen Bank S.C',
-    year: '2022 - 2024',
-    type: 'Data Engineering',
-    description: 'Architected data warehouse structures and developed robust ETL pipelines using SSIS and SQL Server. Built interactive Power BI dashboards.',
-    techStack: ['ETL', 'Data Warehousing', 'Power BI', 'SQL', 'Data Modeling'],
-    imageUrl: 'https://images.unsplash.com/photo-1558494949-ef526b0042a0?auto=format&fit=crop&q=80&w=1000',
-    sourceUrl: '',
     embedUrl: null,
     liveUrl: null,
   },
@@ -272,13 +246,17 @@ const containerVariants = {
 };
 
 const Projects: React.FC = () => {
-  // Type the state to accept a Project object or null
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null); // NEW STATE for Zoom
 
+  const handleCardImageClick = (project: Project) => {
+    setZoomedImage(project.imageUrl);
+  };
+  
   return (
     <div className="container mx-auto px-6 py-20 relative">
       
-      {/* --- SECTION 1: HEADER --- */}
+      {/* --- HEADER --- */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -292,7 +270,7 @@ const Projects: React.FC = () => {
         </p>
       </motion.div>
 
-      {/* --- SECTION 2: LIVE BIGQUERY DASHBOARD --- */}
+      {/* --- LIVE BIGQUERY DASHBOARD --- */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -308,18 +286,29 @@ const Projects: React.FC = () => {
               </span>
               Live Market Intelligence
             </h2>
+            {/* ARCHITECTURALLY CORRECT FLOW */}
             <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm">
-              Fetches real-time market data from <strong>BigQuery</strong> via <strong>FastAPI</strong>. 
-              Features paginated tables, Treemaps, and historical drill-downs.
+              Data is continuously extracted from the <strong>Source API</strong>, transformed by <strong>dbt</strong> into a clean <strong>BigQuery</strong> warehouse, and served to the browser via a <strong>Node.js/Express</strong> backend.
             </p>
+          </div>
+          {/* ARCHITECTURE BADGES */}
+          <div className="mt-4 md:mt-0 flex flex-wrap gap-2 justify-end">
+            <span className="px-3 py-1 text-xs font-semibold rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200">
+              ELT: dbt / BigQuery
+            </span>
+            <span className="px-3 py-1 text-xs font-semibold rounded-full bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-900 dark:text-fuchsia-200">
+              API: Node/Express
+            </span>
+            <span className="px-3 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+              Frontend: React
+            </span>
           </div>
         </div>
 
-        {/* THE ADVANCED DASHBOARD COMPONENT */}
         <CryptoDashboard />
       </motion.div>
 
-      {/* --- SECTION 3: PROJECT GRID --- */}
+      {/* --- PROJECT GRID --- */}
       <motion.div 
         variants={containerVariants}
         initial="hidden"
@@ -327,14 +316,43 @@ const Projects: React.FC = () => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
       >
         {projects.map((project, index) => (
-          <div key={index} onClick={() => project.embedUrl && setSelectedProject(project)}>
-             {/* Uses your custom ProjectCard component */}
-             <ProjectCard project={project} />
+          <div key={index} className="relative">
+             <ProjectCard 
+               project={project} 
+               onImageClick={() => handleCardImageClick(project)} // Pass the zoom handler
+             />
           </div>
         ))}
       </motion.div>
 
-      {/* --- OPTIONAL: MODAL FOR IFRAMES --- */}
+      {/* --- MODAL FOR IMAGE ZOOM (NEW) --- */}
+      <AnimatePresence>
+        {zoomedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="relative w-full max-w-4xl max-h-full overflow-hidden"
+            >
+              <button 
+                onClick={() => setZoomedImage(null)}
+                className="absolute top-4 right-4 z-10 p-2 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
+              <img src={zoomedImage} alt="Zoomed Project View" className="w-full h-auto object-contain rounded-lg shadow-2xl" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* --- MODAL FOR EMBEDDED IFRAMES (Existing - remains the same) --- */}
       <AnimatePresence>
         {selectedProject && selectedProject.embedUrl && (
           <motion.div

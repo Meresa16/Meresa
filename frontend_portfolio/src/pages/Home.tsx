@@ -1,7 +1,4 @@
 
-
-
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -24,8 +21,8 @@ export default function Home() {
       const i = loopNum % roles.length;
       const fullText = roles[i];
 
-      setText(isDeleting 
-        ? fullText.substring(0, text.length - 1) 
+      setText(isDeleting
+        ? fullText.substring(0, text.length - 1)
         : fullText.substring(0, text.length + 1)
       );
 
@@ -47,18 +44,16 @@ export default function Home() {
   }, [text, isDeleting, loopNum, typingSpeed]);
 
   return (
-    <div 
-      // style={{ backgroundImage: "url('https://storage.googleapis.com/dala-prod-public-storage/generated-images/087f6b9e-4dad-47b1-a3f2-3811a555b2ff/hero-background-mejxijj-176545<|fim_middle|><|fim_middle|><|fim_middle|>_sn<|fim_middle|><|fim_middle|><|fim_middle|><|fim_middle|>
+    <div
       className=" h-screen bg-cover bg-center  bg-no-repeat"
-      // style={{ backgroundImage: "url('https://storage.googleapis.com/dala-prod-public-storage/generated-images/087f6b9e-4dad-47b1-a3f2-3811a555b2ff/hero-background-mejxijj-1765459879136.webp')" }}
       style={{ backgroundImage: "url('/public/image.png')" }}
 
     >
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
-        
+
         {/* Name Animation */}
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -68,13 +63,13 @@ export default function Home() {
         </motion.h1>
 
         {/* Typewriter Role Animation */}
-        <motion.div 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 1 }}
           className="h-16 md:h-20 mb-2 flex items-center justify-center"
         >
-          <span className="text-2xl md:text-4xl font-semibold text-indigo-300 mr-2">I am a</span>
+          <span className="text-2xl md:text-5xl font-semibold text-indigo-300 mr-2">I am a</span>
           <span className="text-3xl md:text-5xl font-bold text-white min-w-[10px]">
             {text}
           </span>
@@ -86,27 +81,41 @@ export default function Home() {
         </motion.div>
 
         {/* Description */}
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
           className="max-w-3xl text-lg md:text-xl text-gray-200 mb-8 leading-relaxed mt-4"
         >
-          Specializing in SQL, predictive modeling, ETL pipelines, and business intelligence to drive data-driven strategies.
+          Specializing in SQL, ETL pipelines, predictive modeling, and business intelligence to drive data-driven strategies.
         </motion.p>
 
-        {/* CTA Button */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.6, ease: 'backOut' }}
+          initial={{ opacity: 0, y: 20 }} // Changed scale:0.8 to y:20 for a smoother entrance
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6, ease: 'easeOut' }}
+          className="mt-8 text-center" // Add text-center if these buttons are centered on the page
         >
-          <Link 
-            to="/experience"
-            className="inline-flex items-center justify-center px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-lg transition-transform transform hover:scale-105"
-          >
-            View My Experience <ArrowRight className="ml-2" size={20} />
-          </Link>
+          {/* NEW: Container for buttons to manage spacing */}
+          <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+
+            {/* PRIMARY BUTTON: Live Demo (Stronger focus on the main project) */}
+            <Link
+              to="/projects"
+              className="inline-flex items-center justify-center px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-[1.02] text-lg whitespace-nowrap"
+            >
+              Live Crypto Market Intelligence <ArrowRight className="ml-2" size={20} />
+            </Link>
+
+            {/* SECONDARY BUTTON: View Experience (More subtle styling) */}
+            <Link
+              to="/experience"
+              className="inline-flex items-center justify-center px-8 py-3 bg-transparent border-2 border-indigo-600 hover:bg-indigo-600 text-indigo-600 hover:text-white dark:text-indigo-400 dark:hover:text-white font-semibold rounded-lg transition-colors duration-300 transform hover:scale-[1.02] text-lg whitespace-nowrap"
+            >
+              View My Experience <ArrowRight className="ml-2" size={20} />
+            </Link>
+          </div>
+
         </motion.div>
       </div>
     </div>

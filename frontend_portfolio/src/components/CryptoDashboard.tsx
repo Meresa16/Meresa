@@ -1,385 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import {
-//   LineChart,
-//   Line,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer,
-//   Legend,
-//   TooltipProps
-// } from 'recharts';
-
-// // 1. Define the shape of the data coming from your Python API
-// interface CryptoData {
-//   date: string;
-//   price_usd: number;
-//   moving_avg_7d: number | null; // Can be null if not enough history for MA
-// }
-
-// const CryptoChart: React.FC = () => {
-//   // 2. Add types to useState
-//   const [data, setData] = useState<CryptoData[]>([]);
-//   const [loading, setLoading] = useState<boolean>(true);
-
-//   // 3. Fetch data
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         // Explicitly tell axios that the response data is an array of CryptoData
-//         const response = await axios.get<CryptoData[]>('http://localhost:8000/api/crypto-trends');
-//         setData(response.data);
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <div className="flex items-center justify-center h-[400px] w-full bg-gray-900 rounded-xl border border-gray-800">
-//         <span className="text-white text-lg animate-pulse">Loading live market data...</span>
-//       </div>
-//     );
-//   }
-
-//   // 4. Render Chart
-//   return (
-//     <div className="w-full h-[400px] bg-gray-900 p-4 rounded-xl shadow-lg border border-gray-800">
-//       <div className="flex justify-between items-center mb-4">
-//         <h3 className="text-xl font-bold text-white">Bitcoin Live Price Action</h3>
-//         <span className="px-2 py-1 text-xs font-mono text-cyan-400 bg-cyan-900/30 rounded border border-cyan-800">
-//           Source: BigQuery
-//         </span>
-//       </div>
-
-//       <ResponsiveContainer width="100%" height="100%">
-//         <LineChart data={data}>
-//           <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-          
-//           <XAxis 
-//             dataKey="date" 
-//             stroke="#888" 
-//             tick={{ fontSize: 12 }} 
-//             tickFormatter={(value: string) => value.substring(5)} // Show MM-DD only
-//             minTickGap={30}
-//           />
-          
-//           <YAxis 
-//             stroke="#888" 
-//             domain={['auto', 'auto']} // Auto-scale to fit price
-//             tickFormatter={(value: number) => `$${value.toLocaleString()}`}
-//             width={80}
-//           />
-          
-//           <Tooltip 
-//             contentStyle={{ backgroundColor: '#111', border: '1px solid #444', borderRadius: '8px' }}
-//             itemStyle={{ color: '#fff' }}
-//             formatter={(value: number, name: string) => [
-//               `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 
-//               name === 'price_usd' ? 'Price' : '7D Avg'
-//             ]}
-//             labelFormatter={(label: string) => `Date: ${label}`}
-//           />
-          
-//           <Legend wrapperStyle={{ paddingTop: '10px' }}/>
-          
-//           {/* Price Line (Cyan) */}
-//           <Line 
-//             type="monotone" 
-//             dataKey="price_usd" 
-//             stroke="#00ffee" 
-//             strokeWidth={2} 
-//             dot={false} 
-//             name="BTC Price"
-//             activeDot={{ r: 6 }}
-//           />
-          
-//           {/* Moving Average (Yellow Dashed) */}
-//           <Line 
-//             type="monotone" 
-//             dataKey="moving_avg_7d" 
-//             stroke="#fbbf24" 
-//             strokeWidth={2} 
-//             strokeDasharray="5 5" 
-//             dot={false} 
-//             name="7D Moving Avg"
-//           />
-//         </LineChart>
-//       </ResponsiveContainer>
-//     </div>
-//   );
-// };
-
-// export default CryptoChart;
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import {
-//   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, BarChart, Bar
-// } from 'recharts';
-// import { 
-//   ArrowUp, ArrowDown, Search, ArrowLeft, LayoutGrid, Database, Activity 
-// } from 'lucide-react';
-
-// // --- TYPES ---
-// interface MarketCoin {
-//   symbol: string;
-//   name: string;
-//   price_usd: number;
-//   market_cap: number;
-//   total_volume: number;
-//   change_24h_pct: number;
-//   drawdown_pct: number;
-//   logo_url: string;
-//   rank: number;
-// }
-
-// interface HistoricalData {
-//   date: string;
-//   price_usd: number;
-//   moving_avg_7d: number;
-//   total_volume: number;
-// }
-
-// // --- FORMATTERS ---
-// const fmtMoney = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-// const fmtCompact = (n: number) => new Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(n);
-
-// const CryptoDashboard: React.FC = () => {
-//   // STATE
-//   const [view, setView] = useState<'OVERVIEW' | 'DETAIL'>('OVERVIEW');
-//   const [marketData, setMarketData] = useState<MarketCoin[]>([]);
-//   const [selectedCoin, setSelectedCoin] = useState<MarketCoin | null>(null);
-//   const [history, setHistory] = useState<HistoricalData[]>([]);
-//   const [searchTerm, setSearchTerm] = useState('');
-//   const [loading, setLoading] = useState(true);
-
-//   // --- 1. LOAD MARKET OVERVIEW ---
-//   useEffect(() => {
-//     fetchOverview();
-//   }, []);
-
-//   const fetchOverview = async () => {
-//     try {
-//       setLoading(true);
-//       const res = await axios.get('http://localhost:8000/api/market-overview');
-//       setMarketData(res.data);
-//     } catch (err) {
-//       console.error(err);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // --- 2. LOAD DETAILS WHEN COIN CLICKED ---
-//   const handleCoinClick = async (coin: MarketCoin) => {
-//     setSelectedCoin(coin);
-//     setView('DETAIL');
-//     try {
-//       const res = await axios.get(`http://localhost:8000/api/crypto-trends?symbol=${coin.symbol}`);
-//       setHistory(res.data);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   // FILTER LOGIC
-//   const filteredCoins = marketData.filter(c => 
-//     c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-//     c.symbol.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
-
-//   return (
-//     <div className="w-full bg-[#0b0e11] min-h-[600px] p-6 rounded-2xl border border-gray-800 shadow-2xl text-white font-sans">
-      
-//       {/* --- HEADER --- */}
-//       <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-800">
-//         <div className="flex items-center gap-3">
-//           <Database className="text-cyan-500" />
-//           <h1 className="text-2xl font-bold">Institutional Crypto Monitor</h1>
-//         </div>
-        
-//         {view === 'OVERVIEW' && (
-//           <div className="relative">
-//             <Search className="absolute left-3 top-2.5 text-gray-500 h-4 w-4" />
-//             <input 
-//               type="text" 
-//               placeholder="Search assets..." 
-//               value={searchTerm}
-//               onChange={(e) => setSearchTerm(e.target.value)}
-//               className="bg-[#15191f] border border-gray-700 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-cyan-500 transition-colors w-64"
-//             />
-//           </div>
-//         )}
-
-//         {view === 'DETAIL' && (
-//           <button 
-//             onClick={() => setView('OVERVIEW')}
-//             className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
-//           >
-//             <ArrowLeft size={16} /> Back to Market
-//           </button>
-//         )}
-//       </div>
-
-//       {/* --- VIEW 1: MARKET OVERVIEW TABLE --- */}
-//       {view === 'OVERVIEW' && (
-//         <div className="overflow-x-auto">
-//           {loading ? (
-//              <div className="flex justify-center p-20"><Activity className="animate-spin text-cyan-500"/></div>
-//           ) : (
-//             <table className="w-full text-left border-collapse">
-//               <thead>
-//                 <tr className="text-gray-500 text-xs uppercase tracking-wider border-b border-gray-800">
-//                   <th className="pb-4 pl-4">Asset</th>
-//                   <th className="pb-4 text-right">Price</th>
-//                   <th className="pb-4 text-right">24h Change</th>
-//                   <th className="pb-4 text-right hidden md:table-cell">Market Cap</th>
-//                   <th className="pb-4 text-right hidden md:table-cell">Volume</th>
-//                   <th className="pb-4 text-right hidden md:table-cell">Risk (Drawdown)</th>
-//                 </tr>
-//               </thead>
-//               <tbody className="text-sm">
-//                 {filteredCoins.map((coin) => (
-//                   <tr 
-//                     key={coin.symbol} 
-//                     onClick={() => handleCoinClick(coin)}
-//                     className="hover:bg-[#15191f] cursor-pointer transition-colors border-b border-gray-800/50 group"
-//                   >
-//                     <td className="py-4 pl-4 flex items-center gap-3">
-//                       <span className="text-gray-600 w-4 text-xs font-mono">{coin.rank}</span>
-//                       {coin.logo_url ? (
-//                         <img src={coin.logo_url} alt={coin.symbol} className="w-6 h-6 rounded-full" />
-//                       ) : (
-//                         <div className="w-6 h-6 rounded-full bg-gray-700" />
-//                       )}
-//                       <div>
-//                         <div className="font-bold">{coin.name}</div>
-//                         <div className="text-xs text-gray-500">{coin.symbol.toUpperCase()}</div>
-//                       </div>
-//                     </td>
-//                     <td className="text-right font-mono font-medium">
-//                       {fmtMoney(coin.price_usd)}
-//                     </td>
-//                     <td className="text-right">
-//                       <div className={`flex items-center justify-end gap-1 ${coin.change_24h_pct >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-//                         {coin.change_24h_pct >= 0 ? <ArrowUp size={12}/> : <ArrowDown size={12}/>}
-//                         {Math.abs(coin.change_24h_pct).toFixed(2)}%
-//                       </div>
-//                     </td>
-//                     <td className="text-right text-gray-400 hidden md:table-cell font-mono">
-//                       ${fmtCompact(coin.market_cap)}
-//                     </td>
-//                     <td className="text-right text-gray-400 hidden md:table-cell font-mono">
-//                       ${fmtCompact(coin.total_volume)}
-//                     </td>
-//                     <td className="text-right hidden md:table-cell">
-//                       <span className="px-2 py-1 rounded bg-red-900/20 text-red-400 text-xs font-mono">
-//                         {coin.drawdown_pct.toFixed(2)}%
-//                       </span>
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           )}
-//         </div>
-//       )}
-
-//       {/* --- VIEW 2: COIN DETAIL (CHARTS) --- */}
-//       {view === 'DETAIL' && selectedCoin && (
-//         <div className="animate-in fade-in zoom-in duration-300">
-//           <div className="flex items-center gap-4 mb-6">
-//             <img src={selectedCoin.logo_url} className="w-12 h-12 rounded-full shadow-lg" alt="" />
-//             <div>
-//               <h2 className="text-3xl font-bold">{selectedCoin.name}</h2>
-//               <div className="flex gap-4 text-sm text-gray-400">
-//                 <span>Rank #{selectedCoin.rank}</span>
-//                 <span>•</span>
-//                 <span className="text-cyan-400 font-mono">Real-Time Data</span>
-//               </div>
-//             </div>
-//           </div>
-
-//           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-//             <KpiBox label="Price" value={fmtMoney(selectedCoin.price_usd)} />
-//             <KpiBox label="Market Cap" value={`$${fmtCompact(selectedCoin.market_cap)}`} />
-//             <KpiBox label="Drawdown (ATH)" value={`${selectedCoin.drawdown_pct.toFixed(2)}%`} color="text-red-400" />
-//           </div>
-
-//           <div className="bg-[#15191f] p-4 rounded-xl border border-gray-800 h-[400px]">
-//              <ResponsiveContainer width="100%" height="100%">
-//               <AreaChart data={history}>
-//                 <defs>
-//                   <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-//                     <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/>
-//                     <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
-//                   </linearGradient>
-//                 </defs>
-//                 <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-//                 <XAxis dataKey="date" stroke="#555" tick={{fontSize: 10}} tickFormatter={(v) => v.substring(5)} />
-//                 <YAxis stroke="#555" orientation="right" tickFormatter={(v) => `$${v}`} domain={['auto', 'auto']} />
-//                 <Tooltip contentStyle={{backgroundColor: '#000', borderColor: '#333'}} />
-//                 <Area type="monotone" dataKey="price_usd" stroke="#06b6d4" fill="url(#colorPrice)" strokeWidth={2} />
-//                 <Line type="monotone" dataKey="moving_avg_7d" stroke="#fbbf24" strokeWidth={2} strokeDasharray="5 5" dot={false} />
-//               </AreaChart>
-//             </ResponsiveContainer>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// // Helper Component
-// const KpiBox = ({ label, value, color = "text-white" }: any) => (
-//   <div className="bg-[#15191f] p-4 rounded-xl border border-gray-800">
-//     <div className="text-gray-500 text-xs uppercase tracking-wider mb-1">{label}</div>
-//     <div className={`text-2xl font-bold font-mono ${color}`}>{value}</div>
-//   </div>
-// );
-
-// export default CryptoDashboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 import React, { useEffect, useState, useMemo } from 'react';
@@ -389,9 +7,10 @@ import {
   PieChart, Pie, Cell, Treemap,
   Legend
 } from 'recharts';
-import { 
-  ArrowUp, ArrowDown, Search, ArrowLeft, Database, Activity, 
-  ChevronLeft, ChevronRight, PieChart as PieIcon, Grid 
+import {
+  ArrowUp, ArrowDown, Search, ArrowLeft, Database, Activity,
+  ChevronLeft, ChevronRight, PieChart as PieIcon, Grid,
+  Layers, BarChart2, TrendingUp, Zap
 } from 'lucide-react';
 
 // --- TYPES ---
@@ -429,7 +48,7 @@ const CryptoDashboard: React.FC = () => {
   const [history, setHistory] = useState<HistoricalData[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
-  
+
   // PAGINATION STATE
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -447,6 +66,7 @@ const CryptoDashboard: React.FC = () => {
   const fetchOverview = async () => {
     try {
       setLoading(true);
+      // Fetches FULL dataset (not limited to 50) from your Node/FastAPI backend
       const res = await axios.get('http://localhost:8000/api/market-overview');
       setMarketData(res.data);
     } catch (err) {
@@ -468,10 +88,10 @@ const CryptoDashboard: React.FC = () => {
   };
 
   // --- DATA PREPARATION FOR CHARTS ---
-  
+
   // 1. Filtered Data
-  const filteredCoins = marketData.filter(c => 
-    c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredCoins = marketData.filter(c =>
+    c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.symbol.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -504,9 +124,26 @@ const CryptoDashboard: React.FC = () => {
     }];
   }, [marketData]);
 
+  // 5. NEW: GLOBAL MARKET KPIS (Calculated from full dataset)
+  const globalStats = useMemo(() => {
+    if (marketData.length === 0) return null;
+
+    const totalCap = marketData.reduce((acc, curr) => acc + (curr.market_cap || 0), 0);
+    const totalVol = marketData.reduce((acc, curr) => acc + (curr.total_volume || 0), 0);
+
+    // Find BTC for dominance calculation
+    const btc = marketData.find(c => c.symbol.toLowerCase() === 'btc');
+    const btcDom = btc ? (btc.market_cap / totalCap) * 100 : 0;
+
+    // Find top gainer of the day
+    const topGainer = [...marketData].sort((a, b) => b.change_24h_pct - a.change_24h_pct)[0];
+
+    return { totalCap, totalVol, btcDom, topGainer };
+  }, [marketData]);
+
   return (
     <div className="w-full bg-[#0b0e11] min-h-[800px] p-6 rounded-2xl border border-gray-800 shadow-2xl text-white font-sans">
-      
+
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-800">
         <div className="flex items-center gap-3">
@@ -516,13 +153,13 @@ const CryptoDashboard: React.FC = () => {
             <p className="text-xs text-gray-500 font-mono">BIGQUERY LIVE FEED • {marketData.length} ASSETS TRACKED</p>
           </div>
         </div>
-        
+
         {view === 'OVERVIEW' && (
           <div className="relative">
             <Search className="absolute left-3 top-2.5 text-gray-500 h-4 w-4" />
-            <input 
-              type="text" 
-              placeholder="Search assets..." 
+            <input
+              type="text"
+              placeholder="Search assets..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-[#15191f] border border-gray-700 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-cyan-500 transition-colors w-64"
@@ -531,7 +168,7 @@ const CryptoDashboard: React.FC = () => {
         )}
 
         {view === 'DETAIL' && (
-          <button 
+          <button
             onClick={() => setView('OVERVIEW')}
             className="flex items-center gap-2 text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition-colors"
           >
@@ -543,11 +180,44 @@ const CryptoDashboard: React.FC = () => {
       {/* ================= VIEW 1: MARKET OVERVIEW ================= */}
       {view === 'OVERVIEW' && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          
+
+          {/* --- NEW: GLOBAL MARKET KPIS --- */}
+          {globalStats && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-[#15191f] p-4 rounded-xl border border-gray-800">
+                <div className="text-gray-500 text-[10px] uppercase font-bold flex items-center gap-2">
+                  <Layers size={12} /> Global Market Cap
+                </div>
+                <div className="text-xl font-bold text-white mt-1">${fmtCompact(globalStats.totalCap)}</div>
+              </div>
+              <div className="bg-[#15191f] p-4 rounded-xl border border-gray-800">
+                <div className="text-gray-500 text-[10px] uppercase font-bold flex items-center gap-2">
+                  <BarChart2 size={12} /> Total 24h Volume
+                </div>
+                <div className="text-xl font-bold text-cyan-400 mt-1">${fmtCompact(globalStats.totalVol)}</div>
+              </div>
+              <div className="bg-[#15191f] p-4 rounded-xl border border-gray-800">
+                <div className="text-gray-500 text-[10px] uppercase font-bold flex items-center gap-2">
+                  <PieIcon size={12} /> BTC Dominance
+                </div>
+                <div className="text-xl font-bold text-orange-400 mt-1">{globalStats.btcDom.toFixed(1)}%</div>
+              </div>
+              <div className="bg-[#15191f] p-4 rounded-xl border border-gray-800">
+                <div className="text-gray-500 text-[10px] uppercase font-bold flex items-center gap-2">
+                  <TrendingUp size={12} /> Top Gainer
+                </div>
+                <div className="flex justify-between items-end mt-1">
+                  <span className="text-xl font-bold text-white">{globalStats.topGainer?.symbol.toUpperCase()}</span>
+                  <span className="text-green-400 font-mono text-sm">+{globalStats.topGainer?.change_24h_pct.toFixed(2)}%</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* TOP VISUALIZATIONS ROW */}
           {!loading && marketData.length > 0 && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 h-[300px]">
-              
+
               {/* 1. TREEMAP (Market Map) */}
               <div className="lg:col-span-2 bg-[#15191f] p-4 rounded-xl border border-gray-800">
                 <div className="flex items-center gap-2 mb-2 text-sm text-gray-400">
@@ -583,8 +253,8 @@ const CryptoDashboard: React.FC = () => {
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(val: number) => `$${fmtCompact(val)}`} contentStyle={{backgroundColor:'#000', borderColor:'#333'}} />
-                    <Legend iconType="circle" layout="horizontal" verticalAlign="bottom" wrapperStyle={{fontSize:'10px'}}/>
+                    <Tooltip formatter={(val: number) => `$${fmtCompact(val)}`} contentStyle={{ backgroundColor: '#000', borderColor: '#333' }} />
+                    <Legend iconType="circle" layout="horizontal" verticalAlign="bottom" wrapperStyle={{ fontSize: '10px' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -594,7 +264,7 @@ const CryptoDashboard: React.FC = () => {
           {/* DATA TABLE */}
           <div className="bg-[#15191f] rounded-xl border border-gray-800 overflow-hidden">
             {loading ? (
-               <div className="flex justify-center p-20"><Activity className="animate-spin text-cyan-500"/></div>
+              <div className="flex justify-center p-20"><Activity className="animate-spin text-cyan-500" /></div>
             ) : (
               <>
                 <table className="w-full text-left border-collapse">
@@ -610,8 +280,8 @@ const CryptoDashboard: React.FC = () => {
                   </thead>
                   <tbody className="text-sm">
                     {paginatedCoins.map((coin) => (
-                      <tr 
-                        key={coin.symbol} 
+                      <tr
+                        key={coin.symbol}
                         onClick={() => handleCoinClick(coin)}
                         className="hover:bg-gray-800/50 cursor-pointer transition-colors border-b border-gray-800/30 group"
                       >
@@ -626,7 +296,7 @@ const CryptoDashboard: React.FC = () => {
                         <td className="p-4 text-right font-mono text-cyan-300">{fmtMoney(coin.price_usd)}</td>
                         <td className="p-4 text-right">
                           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold ${coin.change_24h_pct >= 0 ? 'bg-green-900/20 text-green-400' : 'bg-red-900/20 text-red-400'}`}>
-                            {coin.change_24h_pct >= 0 ? <ArrowUp size={10}/> : <ArrowDown size={10}/>}
+                            {coin.change_24h_pct >= 0 ? <ArrowUp size={10} /> : <ArrowDown size={10} />}
                             {Math.abs(coin.change_24h_pct).toFixed(2)}%
                           </span>
                         </td>
@@ -643,7 +313,7 @@ const CryptoDashboard: React.FC = () => {
                     Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredCoins.length)} of {filteredCoins.length} assets
                   </span>
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                       className="p-2 rounded bg-gray-800 hover:bg-gray-700 disabled:opacity-50 transition-colors"
@@ -651,7 +321,7 @@ const CryptoDashboard: React.FC = () => {
                       <ChevronLeft size={16} />
                     </button>
                     <span className="px-3 py-1 bg-gray-800 rounded text-sm flex items-center">{currentPage} / {totalPages}</span>
-                    <button 
+                    <button
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                       className="p-2 rounded bg-gray-800 hover:bg-gray-700 disabled:opacity-50 transition-colors"
@@ -669,7 +339,7 @@ const CryptoDashboard: React.FC = () => {
       {/* ================= VIEW 2: COIN DETAIL ================= */}
       {view === 'DETAIL' && selectedCoin && (
         <div className="animate-in fade-in zoom-in duration-300">
-          
+
           {/* COIN HEADER */}
           <div className="flex flex-col md:flex-row gap-6 mb-8">
             <div className="flex items-center gap-4">
@@ -682,7 +352,7 @@ const CryptoDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* KPI BOXES */}
             <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="bg-[#15191f] p-4 rounded-xl border border-gray-800">
@@ -703,7 +373,7 @@ const CryptoDashboard: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
+
             {/* CHART 1: PRICE TIME SERIES */}
             <div className="lg:col-span-2 bg-[#15191f] p-4 rounded-xl border border-gray-800 h-[400px]">
               <h3 className="text-sm font-bold text-gray-400 mb-4 uppercase">Historical Price Action</h3>
@@ -711,14 +381,14 @@ const CryptoDashboard: React.FC = () => {
                 <AreaChart data={history}>
                   <defs>
                     <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-                  <XAxis dataKey="date" stroke="#555" tick={{fontSize: 10}} tickFormatter={(v) => v.substring(5)} />
+                  <XAxis dataKey="date" stroke="#555" tick={{ fontSize: 10 }} tickFormatter={(v) => v.substring(5)} />
                   <YAxis stroke="#555" orientation="right" tickFormatter={(v) => `$${v}`} domain={['auto', 'auto']} />
-                  <Tooltip contentStyle={{backgroundColor: '#000', borderColor: '#333'}} />
+                  <Tooltip contentStyle={{ backgroundColor: '#000', borderColor: '#333' }} />
                   <Area type="monotone" dataKey="price_usd" stroke="#06b6d4" fill="url(#colorPrice)" strokeWidth={2} />
                   <Line type="monotone" dataKey="moving_avg_7d" stroke="#fbbf24" strokeWidth={2} strokeDasharray="5 5" dot={false} name="7D Avg" />
                 </AreaChart>
@@ -727,7 +397,7 @@ const CryptoDashboard: React.FC = () => {
 
             {/* CHART 2: RISK GAUGE & VOLUME */}
             <div className="flex flex-col gap-6">
-              
+
               {/* CUSTOM GAUGE (Simulated with Half Pie) */}
               <div className="bg-[#15191f] p-4 rounded-xl border border-gray-800 flex-1 flex flex-col items-center justify-center relative">
                 <h3 className="absolute top-4 left-4 text-sm font-bold text-gray-400 uppercase">Risk Meter (Drawdown)</h3>
@@ -744,7 +414,7 @@ const CryptoDashboard: React.FC = () => {
                 <ResponsiveContainer width="100%" height="80%">
                   <BarChart data={history.slice(-14)}> {/* Last 14 days */}
                     <Bar dataKey="total_volume" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                    <Tooltip cursor={{fill: 'transparent'}} contentStyle={{backgroundColor: '#000'}} formatter={(val: number) => fmtCompact(val)} />
+                    <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ backgroundColor: '#000' }} formatter={(val: number) => fmtCompact(val)} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -752,6 +422,38 @@ const CryptoDashboard: React.FC = () => {
           </div>
         </div>
       )}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-700 mt-8">
+
+        <div className="p-6">
+          {/* TOP HEADER */}
+          <div className="mb-1">
+            <span className="text-xl font-bold text-gray-700 dark:text-gray-300">
+              Full-Stack Data Engineering
+            </span>
+          </div>
+          {/* DESCRIPTION (THE "WHAT") */}
+          <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
+          </p>
+
+          {/* TECH STACK (THE "HOW") */}
+          <div className="mb-6">
+            <p className="text-gray-700 dark:text-gray-300 font-semibold mb-3">Technologies Used:</p>
+            <div className="flex flex-wrap gap-2">
+              {['NodeJS', 'ExpressJS', 'BigQuery', 'dbt', 'NextJS', 'Recharts'].map((tech) => (
+                <span key={tech} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs rounded-lg font-medium">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* NEW: ARCHITECTURAL BREAKDOWN */}
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="mb-1"><strong>Data Flow:</strong> CoinGecko → ELT Pipeline (dbt) → BigQuery</p>
+            <p><strong>Service Layer:</strong> Node.js (ExpressJS) API Gateway for secure data access.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -764,7 +466,7 @@ const CustomTreemapContent = (props: any) => {
   const isPositive = change >= 0;
   // Green for up, Red for down, Opacity based on change magnitude
   const color = isPositive ? '#10B981' : '#EF4444';
-  
+
   return (
     <g>
       <rect x={x} y={y} width={width} height={height} style={{ fill: color, stroke: '#0b0e11', strokeWidth: 2, opacity: 0.8 }} />
@@ -804,16 +506,16 @@ const RiskGauge = ({ value }: { value: number }) => {
   // 0% drop = Safe (Green), 80% drop = Risky (Red)
   const clamped = Math.min(Math.max(value, 0), 100);
   const angle = (clamped / 100) * 180; // 0 to 180 degrees
-  
+
   return (
     <div className="relative w-48 h-24 overflow-hidden mt-8">
       <div className="w-48 h-48 rounded-full border-[15px] border-gray-700 box-border absolute top-0 left-0"></div>
-      <div 
+      <div
         className="w-48 h-48 rounded-full border-[15px] border-transparent border-t-green-500 border-r-yellow-500 border-l-red-500 box-border absolute top-0 left-0 transition-transform duration-1000 ease-out"
         style={{ transform: `rotate(${angle - 45}deg)` }} // Simplified rotation logic for visual effect
       ></div>
       {/* Needle */}
-      <div 
+      <div
         className="absolute bottom-0 left-1/2 w-1 h-24 bg-white origin-bottom transition-transform duration-1000"
         style={{ transform: `translateX(-50%) rotate(${angle - 90}deg)` }}
       ></div>
