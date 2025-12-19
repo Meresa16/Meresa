@@ -45,7 +45,7 @@ export default function Education() {
   ];
 
   return (
-    <div className="container mx-auto px-6 py-12 pt-24 min-h-screen">
+    <div className="container bg-gradient-to-br from-purple-50 to-blue-100 dark:from-gray-900 dark:to-blue-950 mx-auto px-6 py-12 pt-24 min-h-screen transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
 const roles = [
-  "Cyber Data Analyst",
-  "Data Scientist",
-  "Software & Database Developer"
+  "Cyber Data Analyst and Engineer",
+  "Data Scientist"
 ];
 
 export default function Home() {
@@ -85,7 +84,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-          className="max-w-3xl text-lg md:text-xl text-gray-200 mb-8 leading-relaxed mt-4"
+          className="max-w-3xl text-lg md:text-2xl text-indigo-200 break-words md:break-normal mx-auto bg-transparent mb-8 leading-relaxed mt-4 text-center"
         >
           Specializing in SQL, ETL pipelines, predictive modeling, and business intelligence to drive data-driven strategies.
         </motion.p>

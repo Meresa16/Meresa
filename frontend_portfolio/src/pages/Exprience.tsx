@@ -70,7 +70,7 @@ const experiences = [
 
 export default function Experience() {
   return (
-    <div className="container mx-auto px-6 py-12 pt-24 min-h-screen">
+    <div className="container mx-auto px-6 py-12 pt-24 min-h-screen ">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -79,7 +79,7 @@ export default function Experience() {
       >
         <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">Professional Experience</h1>
         <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          A timeline of my career journey in Data Science, Engineering, and Software Development.
+          A timeline of my career journey in Data Analytics, Engineering, and Software Development.
         </p>
       </motion.div>
 

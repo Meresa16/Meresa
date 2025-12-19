@@ -3,14 +3,13 @@ import { Download, ExternalLink, AlertCircle } from 'lucide-react';
 
 export default function Resume() {
 
-  const fileId = "1AutxMwrtUzdEOluS3X0sh-6ZB6Q91rWW";
+  const fileId = "1u960-UpyVggtyLyVVvgq6k6uTDaQf8Ej";
 
   const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
   const viewUrl = `https://drive.google.com/file/d/${fileId}/view?usp=sharing`;
 
   return (
     <div className="pt-24 h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-
       {/* Toolbar / Header for Resume */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
