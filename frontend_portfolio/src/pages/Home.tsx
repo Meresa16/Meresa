@@ -5,10 +5,8 @@ import { motion, Variants } from 'framer-motion'; // Import Variants
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
-// --- FINAL FIX: Use 'as const' outside of the component ---
-// This tells TypeScript: "This array is immutable and has exactly 4 numbers, which IS the custom Easing Bezier type."
-const EASE_IN_OUT = [0.42, 0, 0.58, 1] as const; 
 
+const EASE_IN_OUT = [0.42, 0, 0.58, 1] as const; 
 const roles = [
   "Cyber Data Analyst and Engineer",
   "Data Scientist"
@@ -34,7 +32,6 @@ export default function Home() {
       setTypingSpeed(isDeleting ? 50 : 150);
 
       if (!isDeleting && text === fullText) {
-        // Finished typing word, pause before deleting
         setTimeout(() => setIsDeleting(true), 1500);
       } else if (isDeleting && text === '') {
         // Finished deleting, move to next word
@@ -47,7 +44,6 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [text, isDeleting, loopNum, typingSpeed]);
 
-  // Define transition objects inline or outside. Since we use EASE_IN_OUT, let's keep them clean.
   
   return (
     <div

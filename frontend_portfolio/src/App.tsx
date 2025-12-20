@@ -1,10 +1,8 @@
 
 
-
-
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import { ThemeProvider } from './context/ThemeContext'; // Ensure this path is correct
+import { ThemeProvider } from './context/ThemeContext';
 import Header from './components/Header';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -19,7 +17,6 @@ import Projects from './pages/Projects';
 
 function App() {
   return (
-    /* The ThemeProvider must wrap everything, including the Header */
     <ThemeProvider>
       <div className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300 font-sans">
         <Header />
@@ -35,7 +32,6 @@ function App() {
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
-        {/* Footer stays at bottom */}
         <Footer />
         <Toaster position="top-right" />
 
