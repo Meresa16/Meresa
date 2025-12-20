@@ -100,7 +100,7 @@ export default function Experience() {
               } items-start`}
             >
               {/* Timeline Dot (Desktop) */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-indigo-600 rounded-full border-4 border-white dark:border-gray-900 shadow-sm hidden md:block mt-6" />
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-indigo-800 rounded-full border-4 border-white/80 dark:border-gray-900 shadow-sm hidden md:block mt-6" />
 
               {/* Content Card */}
               <div className="w-full md:w-5/12">

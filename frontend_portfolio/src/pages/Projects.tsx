@@ -1,12 +1,11 @@
 
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, X } from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
 import CryptoDashboard from '../components/CryptoDashboard'; 
 
-// --- 1. Project Interface (Must be defined here for use in both files) ---
+// --- 1. Project Interface (Must be defined here for type safety) ---
 export interface Project {
   title: string;
   company: string;
@@ -20,9 +19,9 @@ export interface Project {
   liveUrl: string | null;
 }
 
-// --- 2. Data Array ---
+// --- 2. Data Array (Used for the lower grid) ---
 const projects: Project[] = [
-
+  // IMPORTANT: The Crypto Monitor project is NOT here, as it's the main featured element.
   {
     title: 'Financial Fraud Detection System',
     company: 'Wegagen Bank S.C',
@@ -31,25 +30,25 @@ const projects: Project[] = [
     description: 'Developed and deployed a hybrid Financial Fraud Monitoring System utilizing Rule-Based Logic and Statistical Analysis to identify and mitigate financial fraud risks.',
     techStack: ['SQL', 'Statistical Analysis'],
     imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1000',
-    sourceUrl: '', 
+    sourceUrl: '',
     embedUrl: null,
     liveUrl: null,
   },
-  {
+{
     title: 'App Lifecycle Management System',
     company: 'INSA',
     year: '2019 - 2022',
     type: 'Software Dev',
     description: 'Managed the full software development life cycle (SDLC). Developed scalable software solutions using the MERN stack.',
     techStack: ['ExpressJS', 'NextJS', 'MongoDB', 'Docker', 'Git'],
-    imageUrl: '/task mgt.png', 
+    imageUrl: '/task mgt.png',
     liveUrl: 'https://task-mogndb.vercel.app/login',
     sourceUrl: '',
     embedUrl: null,
   },
 ];
 
-// Animation Variants
+// Animation Variants (Kept for consistency)
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -60,17 +59,20 @@ const containerVariants = {
 
 const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [zoomedImage, setZoomedImage] = useState<string | null>(null); // NEW STATE for Zoom
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
   const handleCardImageClick = (project: Project) => {
     setZoomedImage(project.imageUrl);
   };
   
+  // Featured Project Tech Stack (For the descriptive card)
+  const featuredStack = ['NodeJS', 'ExpressJS', 'BigQuery', 'dbt', 'NextJS', 'Recharts'];
+
   return (
     <div className="container mx-auto px-6 py-20 relative">
-      
+
       {/* --- HEADER --- */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -78,51 +80,74 @@ const Projects: React.FC = () => {
       >
         <h1 className="text-4xl font-bold text-gray-800 mb-4 dark:text-white">Technical Projects</h1>
         <p className="text-gray-600 max-w-2xl mx-auto dark:text-gray-300">
-          From Data Engineering pipelines to Full-Stack applications. 
+          From Data Engineering pipelines to Full-Stack applications.
           Below is a <strong>Live Demo</strong> of my BigQuery integration.
         </p>
       </motion.div>
 
-      {/* --- LIVE BIGQUERY DASHBOARD --- */}
-      <motion.div 
+      {/* --- LIVE BIGQUERY DASHBOARD + DESCRIPTION (FEATURED SECTION) --- */}
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         className="mb-20"
       >
-        <div className="flex flex-col md:flex-row justify-between items-end mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
+          
+          <div className="flex flex-col md:flex-row justify-between items-end mb-6">
+            <div>
+              {/* H2 Title */}
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                Crypto Monitor
+              </h2>
+              
+              {/* CORRECTED ARCHITECTURE FLOW DESCRIPTION */}
+              <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm">
+                Data is continuously extracted from the <strong>Source API</strong>, transformed by <strong>dbt</strong> into a clean <strong>BigQuery</strong> warehouse, and served to the browser via a <strong>Node.js/Express</strong> backend.
+              </p>
+            </div>
+            
+            {/* ARCHITECTURE BADGES */}
+            <div className="mt-4 md:mt-0 flex flex-wrap gap-2 justify-end">
+              <span className="px-3 py-1 text-xs font-semibold rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200">
+                ELT: dbt / BigQuery
               </span>
-              Live Market Intelligence
-            </h2>
-            {/* ARCHITECTURALLY CORRECT FLOW */}
-            <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm">
-              Data is continuously extracted from the <strong>Source API</strong>, transformed by <strong>dbt</strong> into a clean <strong>BigQuery</strong> warehouse, and served to the browser via a <strong>Node.js/Express</strong> backend.
-            </p>
+              <span className="px-3 py-1 text-xs font-semibold rounded-full bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-900 dark:text-fuchsia-200">
+                API: Node.js (Express)
+              </span>
+              <span className="px-3 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                Frontend: React
+              </span>
+            </div>
           </div>
-          {/* ARCHITECTURE BADGES */}
-          <div className="mt-4 md:mt-0 flex flex-wrap gap-2 justify-end">
-            <span className="px-3 py-1 text-xs font-semibold rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200">
-              ELT: dbt / BigQuery
-            </span>
-            <span className="px-3 py-1 text-xs font-semibold rounded-full bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-900 dark:text-fuchsia-200">
-              API: Node/Express
-            </span>
-            <span className="px-3 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
-              Frontend: React
-            </span>
+          
+          <CryptoDashboard />
+          
+          {/* --- PROJECT DETAILS PANEL (Below Dashboard) --- */}
+          <div className="mt-6">
+
+            
+            {/* Source Link Footer for the Dashboard */}
+            {/* <div className="mt-4 text-sm text-center">
+                <a 
+                    href="https://github.com/Meresa16/crypto-etl" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-2 text-indigo-600 dark:text-indigo-400 hover:underline transition-colors"
+                >
+                    View Complete Pipeline Source Code
+                </a>
+            </div> */}
           </div>
         </div>
-
-        <CryptoDashboard />
       </motion.div>
 
       {/* --- PROJECT GRID --- */}
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -130,10 +155,10 @@ const Projects: React.FC = () => {
       >
         {projects.map((project, index) => (
           <div key={index} className="relative">
-             <ProjectCard 
-               project={project} 
-               onImageClick={() => handleCardImageClick(project)} // Pass the zoom handler
-             />
+            <ProjectCard
+              project={project}
+              onImageClick={() => handleCardImageClick(project)}
+            />
           </div>
         ))}
       </motion.div>
@@ -164,7 +189,7 @@ const Projects: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      
+
       {/* --- MODAL FOR EMBEDDED IFRAMES (Existing - remains the same) --- */}
       <AnimatePresence>
         {selectedProject && selectedProject.embedUrl && (

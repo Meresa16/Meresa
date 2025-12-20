@@ -422,7 +422,7 @@ const CryptoDashboard: React.FC = () => {
           </div>
         </div>
       )}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-700 mt-8">
+      <div className="bg-white/80 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-700 mt-8">
 
         <div className="p-6">
           {/* TOP HEADER */}
