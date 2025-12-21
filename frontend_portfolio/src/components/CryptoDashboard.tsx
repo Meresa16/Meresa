@@ -74,36 +74,90 @@ const CryptoDashboard: React.FC = () => {
 
 
   // --- 1. LOAD DATA FUNCTION (The Core Fetch Logic) ---
+  // const fetchOverview = async () => {
+  //   setLoading(true);
+  //   setError(null);
+  //   setIsRetrying(true);
+
+  //   try {
+  //     // Use the custom Axios instance
+  //     const res = await apiAxios.get(`${API_BASE_URL}/api/market-overview`);
+  //    // const res = await axios.get(`${API_BASE_URL}/api/market-overview`);
+  //     if (res.data.length === 0) {
+  //       throw new Error("API returned an empty dataset.");
+  //     }
+
+  //     setMarketData(res.data);
+  //     setIsFirstLoad(false);
+
+  //   } catch (err: any) {
+  //     console.error("Fetch Error:", err);
+  //     // Logic for mobile cold start failure
+  //     if (isFirstLoad) {
+  //       setError("Initial connection failed (Backend is waking up). Please tap 'Retry'.");
+  //     } else {
+  //       // Only set error message if it's a new error after successful loads
+  //       setError("Failed to load data. Please check your network connection.");
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //     setIsRetrying(false);
+  //   }
+  // };
+
+
   const fetchOverview = async () => {
     setLoading(true);
     setError(null);
     setIsRetrying(true);
 
-    try {
-      // Use the custom Axios instance
-      const res = await apiAxios.get(`${API_BASE_URL}/api/market-overview`);
-     // const res = await axios.get(`${API_BASE_URL}/api/market-overview`);
-      if (res.data.length === 0) {
-        throw new Error("API returned an empty dataset.");
-      }
-
-      setMarketData(res.data);
-      setIsFirstLoad(false);
-
-    } catch (err: any) {
-      console.error("Fetch Error:", err);
-      // Logic for mobile cold start failure
-      if (isFirstLoad) {
-        setError("Initial connection failed (Backend is waking up). Please tap 'Retry'.");
-      } else {
-        // Only set error message if it's a new error after successful loads
-        setError("Failed to load data. Please check your network connection.");
-      }
-    } finally {
-      setLoading(false);
-      setIsRetrying(false);
+    // --- Delay for network stability (Keep this) ---
+    if (isFirstLoad) {
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
     }
-  };
+
+    // --- FINAL FIX: Use Fetch API with Aggressive Timeout ---
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 second timeout
+
+    try {
+        const url = `${API_BASE_URL}/api/market-overview`;
+        
+        const response = await fetch(url, { signal: controller.signal });
+        
+        clearTimeout(timeoutId); // Clear the timeout if successful
+
+        if (!response.ok) {
+            // Handle HTTP errors (404, 500, etc. from Render)
+            throw new Error(`API responded with status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.length === 0) {
+             throw new Error("API returned an empty dataset.");
+        }
+        
+        setMarketData(data);
+        setIsFirstLoad(false);
+        
+    } catch (err: any) {
+        clearTimeout(timeoutId);
+        
+        if (err.name === 'AbortError') {
+             // Specific error for timeout (This is the expected cold-start failure)
+             setError("Connection timed out (Server still waking up). Please tap 'Retry' again.");
+        } else {
+             // Generic failure
+             console.error("Fetch Error:", err);
+             setError("Connection failed. The server is either offline or the network timed out.");
+        }
+    } finally {
+        setLoading(false);
+        setIsRetrying(false);
+    }
+};
+
 
   // --- Initial Load Effect ---
   useEffect(() => {
