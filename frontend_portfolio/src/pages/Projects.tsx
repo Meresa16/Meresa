@@ -26,9 +26,9 @@ const projects: Project[] = [
     title: 'Real-time Crypto Data Analytics & Intelligence Platform',
     company: 'Personal Portfolio',
     year: '2025',
-    type: 'Full-Stack Data Engineering',
-    description: 'A professional financial terminal featuring a market-wide Treemap, paginated asset tables, and real-time drill-down analytics. Built with React (Recharts), NodeJS (ExpressJS), and Google BigQuery.',
-    techStack: ['NodeJS', 'ExpressJS', 'BigQuery', 'dbt', 'NextJS', 'Recharts'],
+    type: null,
+    description: null,
+    techStack: [null],
     imageUrl: 'https://images.unsplash.com/photo-1642104704074-907c0698cbd9?auto=format&fit=crop&q=80&w=1000',
     sourceUrl: 'https://github.com/Meresa16/crypto-etl',
     embedUrl: null,
@@ -144,16 +144,16 @@ const Projects: React.FC = () => {
           <div className="mt-6">
             
             {/* DESCRIPTION (THE "WHAT") */}
-            <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300">
+            {/* <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300">
                 Full-Stack Data Engineering
-            </h3>
+            </h3> */}
             
             <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 pt-2 pb-4 border-b border-gray-200 dark:border-gray-700">
               {featuredProject.description}
             </p>
 
             {/* TECH STACK (THE "HOW") */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <p className="text-gray-700 dark:text-gray-300 font-semibold mb-3">Technologies Used:</p>
               <div className="flex flex-wrap gap-2">
                 {featuredProject.techStack.map((tech) => (
@@ -162,7 +162,7 @@ const Projects: React.FC = () => {
                   </span>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* Source Link Footer for the Dashboard */}
             <div className="mt-4 text-sm text-center">
