@@ -331,6 +331,7 @@ const CryptoDashboard: React.FC = () => {
             </div>
           )}
 
+          
           {/* DATA TABLE */}
           <div className="bg-[#15191f] rounded-xl border border-gray-800 overflow-hidden">
             {loading ? (
