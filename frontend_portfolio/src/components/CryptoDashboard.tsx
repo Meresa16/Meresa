@@ -65,8 +65,17 @@ const CryptoDashboard: React.FC = () => {
 
   // API URL (Reads from Vercel/Render Environment)
   // FIX: Using the correct import.meta.env for Vite and fallback
-  const API_BASE_URL = import.meta.env.VITE_RENDER_API_URL || 'http://localhost:8000';
+  // const API_BASE_URL = import.meta.env.VITE_RENDER_API_URL || 'http://localhost:8000';
+  // Define the API_BASE_URL constant globally outside the component or at the start.
+// This time, we are being very explicit about the checks.
+  const VERCEL_API_URL = import.meta.env.VITE_RENDER_API_URL;
+  const API_BASE_URL = VERCEL_API_URL && VERCEL_API_URL.startsWith('http')
+    ? VERCEL_API_URL 
+    : 'http://localhost:8000'; // Fallback
 
+// Add a console check to see the final URL used
+  console.log("Using API Base URL:", API_BASE_URL); 
+// Then, use API_BASE_URL in your axios calls.
 
 
   // --- 1. LOAD DATA FUNCTION (The Core Fetch Logic) ---
