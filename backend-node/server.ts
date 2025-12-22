@@ -357,18 +357,18 @@ const TEMP_KEY_PATH = '/tmp/gcp-key.json'; // Render's writable path
 
 // --- CORS Configuration (Simplest Working Array Format) ---
 // Define the allowed origins as a simple array of strings and RegExp
-const ALLOWED_ORIGINS = [
-    'http://localhost:3000',         // Local React Frontend
-    'https://meresa.vercel.app',     // Production Domain
-    /https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/, // Allows ALL Vercel preview/staging subdomains
-];
-
 app.use(cors({
-    // FIX: Passing the array directly. The 'cors' library handles all the internal logic.
-    origin: ALLOWED_ORIGINS, 
+    // FIX: Define the array directly in the 'origin' property for conciseness
+    origin: [
+        'http://localhost:3000',         // Local Development
+        'https://meresa.vercel.app',     // Production Domain
+        /https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/, // Vercel Preview/Staging Regex
+    ], 
     methods: ['GET', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
 }));
+
+app.use(express.json());
 
 app.use(express.json());
 
