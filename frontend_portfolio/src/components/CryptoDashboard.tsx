@@ -118,7 +118,7 @@ const CryptoDashboard: React.FC = () => {
 
     // --- FINAL FIX: Use Fetch API with Aggressive Timeout ---
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000); // 25 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 6000000); // 25 second timeout
 
     try {
         const url = `${API_BASE_URL}/api/market-overview`;
