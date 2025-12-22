@@ -340,12 +340,20 @@
 
 
 
+
+
+
+
+
+
+
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { BigQuery } from '@google-cloud/bigquery';
 import path from 'path';
 import fs from 'fs';
-import { Credentials } from 'google-auth-library'; 
+// Note: Credentials import is no longer strictly necessary but kept for full historical context
+// import { Credentials } from 'google-auth-library'; 
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -353,24 +361,26 @@ const PROJECT_ID = 'loyal-weaver-471905-p9';
 
 // The local path is only used for local development fallback
 const KEY_PATH = 'loyal-weaver-471905-p9-44de225b313c.json';
-const TEMP_KEY_PATH = '/tmp/gcp-key.json'; // Render's writable path
+const TEMP_KEY_PATH = '/tmp/gcp-key.json';
 
-// --- CORS Configuration (Simplest Working Array Format) ---
-// Define the allowed origins as a simple array of strings and RegExp
+// --- CORS Configuration (Simplified and Robust) ---
+// Define the allowed origins as a single array (including the Vercel Regex)
+const ALLOWED_ORIGINS = [
+    'http://localhost:3000',         // Local React Frontend
+    'https://meresa.vercel.app',     // Production Domain
+    'https://meresa-portfolio-git-feature-x.vercel.app', // Example Staging Domain
+    /https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/, // Allows ALL Vercel preview/staging subdomains
+];
+
 app.use(cors({
-    // FIX: Define the array directly in the 'origin' property for conciseness
-    origin: [
-        'http://localhost:3000',         // Local Development
-        'https://meresa.vercel.app',     // Production Domain
-        /https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/, // Vercel Preview/Staging Regex
-    ], 
+    // Pass the array directly. The 'cors' library internally checks strings and RegExp.
+    origin: ALLOWED_ORIGINS,
     methods: ['GET', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
 }));
 
 app.use(express.json());
 
-app.use(express.json());
 
 // --- LOGGING UTILITY ---
 const log = (msg: string) => {
@@ -380,13 +390,13 @@ const log = (msg: string) => {
 
 // --- BIGQUERY CLIENT (SECURE, ENVIRONMENT-AWARE FUNCTION) ---
 const getBigQueryClient = () => {
-    
+
     // 1. Check for Environment Variable (Render's SECURE Method)
     const keyString = process.env.GCP_SERVICE_ACCOUNT_KEY;
 
     if (keyString) {
         log('🔑 Authenticating via secure Environment Variable (Writing temp file)');
-        
+
         try {
             // Write the environment variable content to a temporary file
             fs.writeFileSync(TEMP_KEY_PATH, keyString);
@@ -400,8 +410,8 @@ const getBigQueryClient = () => {
             console.error("CRITICAL: Failed to write/read temporary key file:", e);
             throw new Error(`CRITICAL: Deployment failure in secure authentication step.`);
         }
-    } 
-    
+    }
+
     // 2. Fallback to Local File (Local Development Only)
     const localKeyPath = path.join(__dirname, KEY_PATH);
     if (fs.existsSync(localKeyPath)) {
@@ -417,11 +427,6 @@ const getBigQueryClient = () => {
 };
 
 // --- ENDPOINTS ---
-
-// NEW: RENDER HEALTH CHECK ROUTE (CRITICAL FIX)
-app.get('/health', (req: Request, res: Response) => {
-    res.json({ status: 'ok', service: 'Crypto Backend' });
-});
 
 // Root Check
 app.get('/', (req: Request, res: Response) => {
@@ -484,13 +489,6 @@ app.get('/api/crypto-trends', async (req: Request, res: Response) => {
         res.status(500).json({ error: "Internal Server Error: " + error.message });
     }
 });
-
-// --- FINAL FIX: 404 CATCH-ALL (MUST be the last route definition!) ---
-app.use((req: Request, res: Response) => {
-    console.warn(`404: Unhandled route requested: ${req.method} ${req.originalUrl}`);
-    res.status(404).json({ error: "404: Endpoint not found. Check API path and method." });
-});
-
 
 // --- START SERVER ---
 app.listen(PORT, () => {
