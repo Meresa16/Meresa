@@ -15,7 +15,7 @@ export default function Footer() {
               Meresa Gidey
             </Link>
             <p className="mt-4 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-              Cyber Data Analyst & Data Scientist based in Addis Ababa. Passionate about transforming data into actionable insights and driving strategic decisions through advanced analytics.
+              Cyber Data Analyst & Data Scientist based in Addis Ababa.
             </p>
           </div>
 

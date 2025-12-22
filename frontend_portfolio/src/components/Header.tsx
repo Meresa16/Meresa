@@ -40,7 +40,7 @@ export default function Header() {
             "
           >
             <img
-              src="/favicon1.png"  /* Path to your image */
+              src="/profile.jpg"  /* Path to your image */
               alt="Meresa Gidey Profile Logo"
               className="
                 w-full h-full      /* Make image fill the container */
