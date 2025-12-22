@@ -211,6 +211,7 @@ const CryptoDashboard: React.FC = () => {
             <h1 className="text-2xl font-bold">Live Crypto API Dashboard</h1>
             <p className="text-xs text-gray-500 font-mono">BIGQUERY LIVE FEED • {marketData.length} ASSETS TRACKED</p>
           </div>
+          
         </div>
 
         {view === 'OVERVIEW' && (
@@ -337,7 +338,7 @@ const CryptoDashboard: React.FC = () => {
               <div className="flex justify-center p-20"><Activity className="animate-spin text-cyan-500" /></div>
             ) : (
               <>
-                <table className="w-full text-left border-collapse">
+                <table className="w-full text-left border-collapse min-w-max">
                   <thead>
                     <tr className="bg-[#0b0e11] text-gray-500 text-xs uppercase tracking-wider border-b border-gray-800">
                       <th className="p-4">Rank</th>
