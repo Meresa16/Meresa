@@ -119,7 +119,7 @@ export default function About() {
             </h2>
             
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6 text-justify">
-              With over seven years of hands-on experience, 
+              With over 8+ years of hands-on experience, 
               I specialize in the full data lifecycle from building ETL pipelines to deploying predictive models. 
               My background spans across three core pillars:
             </p>
