@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowRight, BarChart3, Database, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const roles = ['Cyber Data Analytics', 'Data Scientist', 'Data Engineer'];
+const roles = ['Cyber Data Analyst', 'Data Scientist', 'Data Engineer'];
 
 export default function Home() {
   const [roleIndex, setRoleIndex] = useState(0);
-  const [roleText, setRoleText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
@@ -20,33 +18,19 @@ export default function Home() {
   const sceneRotateY = useTransform(smoothX, [-1, 1], [-10, 10]);
   const backgroundX = useTransform(smoothX, [-1, 1], [10, -10]);
   const backgroundY = useTransform(smoothY, [-1, 1], [8, -8]);
+  const spotlightX = useTransform(smoothX, [-1, 1], [0, 100]);
+  const spotlightY = useTransform(smoothY, [-1, 1], [0, 100]);
+  const spotlight = useMotionTemplate`radial-gradient(560px circle at ${spotlightX}% ${spotlightY}%, rgba(99, 102, 241, 0.2), transparent 72%)`;
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      setRoleText(roles[roleIndex]);
-      return;
-    }
+    if (prefersReducedMotion) return;
 
-    const currentRole = roles[roleIndex];
-    const isComplete = roleText === currentRole;
-    const isEmpty = roleText.length === 0;
-    const delay = isComplete ? 1700 : isDeleting && isEmpty ? 350 : isDeleting ? 45 : 85;
+    const timer = window.setInterval(() => {
+      setRoleIndex((index) => (index + 1) % roles.length);
+    }, 3200);
 
-    const timer = window.setTimeout(() => {
-      if (isComplete) {
-        setIsDeleting(true);
-      } else if (isDeleting && isEmpty) {
-        setIsDeleting(false);
-        setRoleIndex((index) => (index + 1) % roles.length);
-      } else {
-        setRoleText(
-          isDeleting ? currentRole.slice(0, roleText.length - 1) : currentRole.slice(0, roleText.length + 1)
-        );
-      }
-    }, delay);
-
-    return () => window.clearTimeout(timer);
-  }, [isDeleting, prefersReducedMotion, roleIndex, roleText]);
+    return () => window.clearInterval(timer);
+  }, [prefersReducedMotion]);
 
   const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
     if (prefersReducedMotion || event.pointerType !== 'mouse') return;
@@ -80,9 +64,33 @@ export default function Home() {
       />
       <div className="absolute inset-0 -z-10 bg-slate-950/75" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-indigo-950/55" />
-      <div className="pointer-events-none absolute -right-36 -top-32 -z-10 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-36 -top-32 -z-10 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl"
+        animate={prefersReducedMotion ? undefined : {
+          x: [0, -55, 10, 0],
+          y: [0, 50, 80, 0],
+          scale: [1, 1.18, 0.92, 1],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-48 left-[18%] -z-10 h-[28rem] w-[28rem] rounded-full bg-cyan-500/10 blur-3xl"
+        animate={prefersReducedMotion ? undefined : {
+          x: [0, 70, -35, 0],
+          y: [0, -55, -10, 0],
+          scale: [1, 0.9, 1.12, 1],
+        }}
+        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{ backgroundImage: spotlight }}
+      />
 
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-8 px-6 py-24 md:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-8 px-6 py-24 md:grid-cols-[1.15fr_0.85fr] lg:gap-16">
         <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
@@ -100,7 +108,7 @@ export default function Home() {
             transition={{ delay: 0.15, duration: 0.6 }}
             className="mb-5 text-sm font-semibold uppercase tracking-[0.24em] text-indigo-300"
           >
-            Data · Analytics · Engineering
+            Turning complex data into clearer decisions
           </motion.p>
 
           <motion.h1
@@ -112,10 +120,24 @@ export default function Home() {
             Hello, I&apos;m <span className="text-indigo-300">Meresa Gidey.</span>
           </motion.h1>
 
-          <div className="mt-5 flex min-h-10 items-center text-xl font-semibold text-slate-100 sm:text-2xl">
-            <span className="mr-2 text-indigo-300">I am a</span>
-            <span aria-hidden="true" className="min-w-0">
-              {roleText}
+          <p
+            aria-label="I am a Cyber Data Analyst, Data Scientist, and Data Engineer"
+            className="mt-5 flex min-h-12 items-center text-xl font-semibold text-slate-100 sm:text-2xl"
+          >
+            <span aria-hidden="true" className="mr-2 text-indigo-300">I am a</span>
+            <span aria-hidden="true" className="relative inline-grid min-w-[12rem] overflow-hidden sm:min-w-[15rem]">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={roles[roleIndex]}
+                  initial={prefersReducedMotion ? false : { opacity: 0, y: 12, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  exit={prefersReducedMotion ? undefined : { opacity: 0, y: -12, filter: 'blur(4px)' }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  className="col-start-1 row-start-1 whitespace-nowrap text-indigo-200"
+                >
+                  {roles[roleIndex]}
+                </motion.span>
+              </AnimatePresence>
             </span>
             {!prefersReducedMotion && (
               <motion.span
@@ -125,8 +147,7 @@ export default function Home() {
                 className="ml-1 inline-block h-7 w-0.5 bg-indigo-300"
               />
             )}
-            <span className="sr-only">{roles.join(', ')}</span>
-          </div>
+          </p>
 
           <motion.p
             initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
@@ -134,8 +155,8 @@ export default function Home() {
             transition={{ delay: 0.4, duration: 0.65 }}
             className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-200 sm:text-xl"
           >
-            I work across data analytics, engineering, and software development—turning
-            complex data into reliable systems and useful insights.
+            I design data pipelines, analytics, and software that turn complex information
+            into useful insights and practical decisions.
           </motion.p>
           <p className="mt-4 text-sm text-slate-300">Addis Ababa, Ethiopia</p>
 
@@ -147,13 +168,13 @@ export default function Home() {
           >
             <Link
               to="/projects"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-500 px-6 py-3 font-semibold text-white shadow-lg shadow-indigo-950/30 transition-colors hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-500 px-6 py-3 font-semibold text-white shadow-lg shadow-indigo-950/30 transition duration-200 hover:-translate-y-1 hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Explore projects <ArrowRight size={18} />
             </Link>
             <Link
               to="/experience"
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/40 px-6 py-3 font-semibold text-white transition-colors hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/40 px-6 py-3 font-semibold text-white transition duration-200 hover:-translate-y-1 hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               View experience <ArrowDown size={18} />
             </Link>
@@ -169,6 +190,11 @@ export default function Home() {
           }}
           className="relative mx-auto hidden aspect-square w-full max-w-[26rem] md:block"
         >
+          <motion.div
+            className="absolute inset-[18%] rounded-full bg-indigo-500/20 blur-3xl"
+            animate={prefersReducedMotion ? undefined : { opacity: [0.35, 0.8, 0.45], scale: [0.85, 1.12, 0.9] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          />
           <motion.div
             animate={prefersReducedMotion ? undefined : { rotate: 360 }}
             transition={{ duration: 42, repeat: Infinity, ease: 'linear' }}
@@ -204,6 +230,12 @@ export default function Home() {
                 />
               ))}
             </div>
+            <motion.div
+              aria-hidden="true"
+              className="absolute inset-x-7 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/80 to-transparent"
+              animate={prefersReducedMotion ? undefined : { y: [0, 185, 0], opacity: [0, 0.8, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            />
           </motion.div>
 
           <motion.div
@@ -212,7 +244,7 @@ export default function Home() {
             className="absolute left-0 top-[22%] flex items-center gap-3 rounded-xl border border-white/15 bg-slate-900/75 px-4 py-3 text-sm text-white shadow-xl backdrop-blur-lg"
           >
             <Database className="text-cyan-300" size={19} />
-            <span>Reliable data</span>
+            <span>Data Engineering</span>
           </motion.div>
           <motion.div
             animate={prefersReducedMotion ? undefined : { y: [0, 9, 0] }}
@@ -220,7 +252,7 @@ export default function Home() {
             className="absolute bottom-[19%] right-0 flex items-center gap-3 rounded-xl border border-white/15 bg-slate-900/75 px-4 py-3 text-sm text-white shadow-xl backdrop-blur-lg"
           >
             <ShieldCheck className="text-violet-300" size={19} />
-            <span>Risk analytics</span>
+            <span>Fraud Detection</span>
           </motion.div>
         </motion.div>
       </div>
