@@ -4,22 +4,26 @@
 import { motion } from 'framer-motion';
 import { GraduationCap, Award, Calendar, CheckCircle, ExternalLink } from 'lucide-react';
 
+interface Certification {
+  title: string;
+  issuer: string;
+  link?: string;
+}
+
 export default function Education() {
-  const certifications = [
+  const certifications: Certification[] = [
     { 
       title: "CompTIA CySA+ (Cybersecurity Analyst)", 
       issuer: "Apptech Learning Center",
-      link: "" // Add URL if you have one
     },
     { 
-      title: "Data Analysis Fandamentals", 
+      title: "Data Analysis Fundamentals",
       issuer: "Udacity (Ethiopian Gov Supported)",
       link: "https://learn.udacity.com/view-certificate/nd002-gc-251" 
     },
     { 
       title: "Power BI Certificate of Achievement", 
       issuer: "365 Data Science",
-      // specific link added here
       link: "https://learn.365financialanalyst.com/certificates/CC-37AF3DC2A1/" 
     },
     { 
@@ -32,15 +36,14 @@ export default function Education() {
       issuer: "Cisco Networking Academy",
       link: "https://www.credly.com/badges/5d708d94-ebe4-4bba-89fc-8f6516142140/public_url" 
     },
-       { 
-      title: "Certificate of completion - SQL", 
+    {
+      title: "SQL Certificate of Completion",
       issuer: "365 Data Science",
-      link: "https://learn.365datascience.com/c/bfb4a3ec89" 
+      link: "https://learn.365datascience.com/c/bfb4a3ec89"
     },
     { 
       title: "Short-term Training on Data Science", 
       issuer: "Emerald International College",
-      link: "" 
     }
   ];
 
@@ -68,22 +71,32 @@ export default function Education() {
           </h2>
           <div className="space-y-6">
             {/* Masters */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+            <motion.div
+              whileHover={{ y: -4, rotateX: 2 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+              style={{ transformPerspective: 900 }}
+              className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+            >
               <h3 className="text-xl font-bold text-gray-800 dark:text-white">MSc in Data Science</h3>
               <p className="text-indigo-600 dark:text-indigo-400 font-medium">Emerald International College</p>
               <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm mt-2">
                 <Calendar size={14} className="mr-2" /> 2023 – 2025
               </div>
-            </div>
+            </motion.div>
 
             {/* Bachelors */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+            <motion.div
+              whileHover={{ y: -4, rotateX: 2 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+              style={{ transformPerspective: 900 }}
+              className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+            >
               <h3 className="text-xl font-bold text-gray-800 dark:text-white">BSc in Information Systems</h3>
               <p className="text-indigo-600 dark:text-indigo-400 font-medium">Mekelle University</p>
               <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm mt-2">
                 <Calendar size={14} className="mr-2" /> 2013 – 2017
               </div>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
 
@@ -96,7 +109,11 @@ export default function Education() {
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
             <Award className="mr-3 text-indigo-600 dark:text-indigo-400" /> Certifications
           </h2>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+          <motion.div
+            whileHover={{ y: -3 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+            className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+          >
             <ul className="space-y-5">
               {certifications.map((cert, index) => (
                 <li key={index} className="flex items-start group">
@@ -122,7 +139,7 @@ export default function Education() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>

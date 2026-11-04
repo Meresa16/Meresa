@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { toast } from 'sonner';
 import { Send, Phone, Mail, MapPin } from 'lucide-react';
 
 // --- Animation Variants ---
@@ -19,55 +18,21 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, scale: 1 },
 };
 
-const iconHoverVariants = {
-  hover: { scale: 1.1, rotate: 5, transition: { type: 'spring', stiffness: 300 } },
-};
-
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true); // Start submission state
-
-    // Basic form validation
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      toast.error('Please fill out all fields.', {
-        description: 'All fields are required to send a message.',
-        duration: 5000,
-      });
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Simulate form submission (replace with actual API call if needed)
-    try {
-      // Simulate a network request
-      await new Promise(resolve => setTimeout(resolve, 1200));
-
-      // If submission is successful
-      toast.success('Message sent successfully!', {
-        description: 'I will get back to you as soon as possible.',
-        duration: 7000,
-        // You can customize the toast further with icons, etc.
-        // icon: <Send className="text-green-500" />,
-      });
-      setFormData({ name: '', email: '', message: '' }); // Reset form
-    } catch (error) {
-      toast.error('Failed to send message.', {
-        description: 'There was an error on our end. Please try again later.',
-        duration: 5000,
-      });
-      console.error('Form submission error:', error);
-    } finally {
-      setIsSubmitting(false); // End submission state
-    }
+    const subject = encodeURIComponent(`Portfolio message from ${formData.name.trim()}`);
+    const body = encodeURIComponent(
+      `${formData.message.trim()}\n\nReply to: ${formData.email.trim()}`
+    );
+    window.location.href = `mailto:meresagidey0938@gmail.com?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -102,6 +67,7 @@ export default function Contact() {
             <motion.a 
               href="mailto:meresagidey0938@gmail.com" 
               className="flex items-center group cursor-pointer" 
+              whileHover={{ x: 5 }}
               whileTap={{ scale: 0.95 }}
             >
               <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center mr-5 shadow-md transition-all duration-300 group-hover:bg-indigo-600 group-hover:shadow-lg">
@@ -114,6 +80,7 @@ export default function Contact() {
             <motion.a 
               href="tel:+251938140959" 
               className="flex items-center group cursor-pointer" 
+              whileHover={{ x: 5 }}
               whileTap={{ scale: 0.95 }}
             >
               <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center mr-5 shadow-md transition-all duration-300 group-hover:bg-indigo-600 group-hover:shadow-lg">
@@ -126,6 +93,7 @@ export default function Contact() {
             <motion.div 
               className="flex items-center" 
               variants={itemVariants}
+              whileHover={{ x: 5 }}
             >
               <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center mr-5 shadow-md">
                 <MapPin className="text-indigo-600 size-7" />
@@ -147,7 +115,10 @@ export default function Contact() {
           >
             Send Me a Message
           </motion.h2>
-          <form onSubmit={handleSubmit} className="space-y-2 bg-white dark:bg-gray-800 dark:text-white p-2 rounded-xl shadow-xl border-t-4 border-indigo-500 transition-shadow duration-300 hover:shadow-2xl focus-within:shadow-2xl"> {/* More pronounced shadow, border-top */}
+          <form onSubmit={handleSubmit} className="space-y-2 bg-white dark:bg-gray-800 dark:text-white p-2 rounded-xl shadow-xl border-t-4 border-indigo-500 transition-shadow duration-300 hover:shadow-2xl focus-within:shadow-2xl">
+            <p className="px-3 pt-2 text-sm text-gray-600 dark:text-gray-300">
+              Submitting opens your default email app with your message ready to send.
+            </p>
             
             {/* Name Input */}
             <motion.div variants={itemVariants}>
@@ -204,27 +175,9 @@ export default function Contact() {
             <motion.div variants={itemVariants}>
               <button 
                 type="submit" 
-                disabled={isSubmitting} // Disable while submitting
-                className={`w-full inline-flex items-center justify-center px-8 py-4 
-                           text-white font-bold rounded-lg shadow-lg transition-all duration-300
-                           ${isSubmitting 
-                             ? 'bg-gray-400 cursor-not-allowed' 
-                             : 'bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-1'
-                           }`}
+                className="w-full inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg shadow-lg transition-all duration-300 bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-1"
               >
-                {isSubmitting ? (
-                  <>
-                    <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 8l4-3.709z"></path>
-                    </svg>
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    Send Message <Send className="ml-3 size-5" />
-                  </>
-                )}
+                Send Message <Send className="ml-3 size-5" />
               </button>
             </motion.div>
           </form>

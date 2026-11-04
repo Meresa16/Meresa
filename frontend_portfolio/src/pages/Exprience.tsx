@@ -1,18 +1,18 @@
 import { motion } from 'framer-motion';
-import { Briefcase, Calendar, MapPin, CheckCircle } from 'lucide-react';
+import { Briefcase, MapPin, CheckCircle } from 'lucide-react';
 
 const experiences = [
   {
     id: 1,
-    role: 'Cyber Data Analyst and System Administration Officer',
+    role: 'Cyber Data Analytics and System Administration Officer',
     company: 'Wegagen Bank S.C',
     period: 'Jan 2025 – Present',
     location: 'Addis Ababa, Ethiopia',
     description: [
-      'Conduct statistical analysis and data mining to detect fraudulent activity.',
-      'Build and maintain predictive models using machine learning to identify potential risks.',
-      'Audit and integrate multiple data sources to ensure high accuracy and quality.',
-      'Maintain systems for collecting, storing, and analyzing fraud-related data.'
+    'Analyze data and apply statistical methods to help identify potentially fraudulent activity.',
+    'Build and maintain machine-learning models to support risk identification.',
+    'Review and integrate data from multiple sources, maintaining data quality.',
+    'Support systems used to collect, store, and analyze fraud-related data.'
     ]
   },
   {
@@ -22,10 +22,10 @@ const experiences = [
     period: 'Dec 2022 – Dec 2024',
     location: 'Addis Ababa, Ethiopia',
     description: [
-      'Designed, developed, and maintained data warehouse structures.',
-      'Developed ETL pipelines for cleaning, integrating, and loading data.',
+      'Designed and maintained data warehouse structures.',
+      'Built ETL pipelines to clean, integrate, and load data.',
       'Translated business intelligence requirements into technical solutions.',
-      'Built dashboards and reporting systems for decision-making using Power BI.'
+      'Created Power BI dashboards and reports to support decision-making.'
     ]
   },
   {
@@ -35,10 +35,10 @@ const experiences = [
     period: 'Dec 2019 – Dec 2022',
     location: 'Addis Ababa, Ethiopia',
     description: [
-      'Managed full software development life cycle from planning to deployment.',
-      'Developed software solutions to meet business and customer requirements.',
-      'Wrote scalable, maintainable, and high-quality code in Python and Java.',
-      'Collaborated with stakeholders to translate requirements into technical solutions.'
+      'Contributed across the software development lifecycle, from planning through deployment.',
+      'Built software solutions to meet business and user requirements.',
+      'Developed and maintained applications using Python and Java.',
+      'Worked with stakeholders to translate requirements into technical solutions.'
     ]
   },
   {
@@ -48,10 +48,10 @@ const experiences = [
     period: 'Feb 2019 – Nov 2019',
     location: 'Addis Ababa, Ethiopia',
     description: [
-      'Architected and scheduled new data warehouse implementations.',
-      'Provided daily database support and resolved operational issues.',
-      'Developed reporting applications ensuring data accuracy and consistency.',
-      'Managed backups and recovery strategies.'
+      'Designed and scheduled data warehouse implementations.',
+      'Provided database support and resolved operational issues.',
+      'Built reporting applications with a focus on data accuracy and consistency.',
+      'Supported database backup and recovery processes.'
     ]
   },
   {
@@ -61,9 +61,9 @@ const experiences = [
     period: 'Feb 2018 – Jan 2019',
     location: 'Addis Ababa, Ethiopia',
     description: [
-      'Gained hands-on experience in DevOps, CI/CD, Docker, Git, Kafka, and GitHub workflows.',
-      'Completed practical sessions in Node.js, Flutter, SQL, and API documentation.',
-      'Practiced with demos and exercises to strengthen technical skills.'
+      'Built foundational experience with DevOps, CI/CD, Docker, Git, Kafka, and GitHub workflows.',
+      'Completed practical training in Node.js, Flutter, SQL, and API documentation.',
+      'Applied these skills through guided exercises and demonstrations.'
     ]
   }
 ];
@@ -79,7 +79,7 @@ export default function Experience() {
       >
         <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">Professional Experience</h1>
         <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          A timeline of my career journey in Data Analytics, Engineering, and Software Development.
+          Experience across data analytics, data engineering, cybersecurity analytics, and software development.
         </p>
       </motion.div>
 
@@ -104,7 +104,12 @@ export default function Experience() {
 
               {/* Content Card */}
               <div className="w-full md:w-5/12">
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-50 dark:border-gray-700">
+                <motion.div
+                  whileHover={{ y: -4, rotateX: 1.5 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                  style={{ transformPerspective: 1000 }}
+                  className="rounded-lg border border-gray-50 bg-white p-6 shadow-md transition-shadow hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
+                >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded">
                       {exp.period}
@@ -130,7 +135,7 @@ export default function Experience() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           ))}
@@ -139,9 +144,4 @@ export default function Experience() {
     </div>
   );
 }
-
-
-
-
-
 

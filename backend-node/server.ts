@@ -370,6 +370,7 @@ const ALLOWED_ORIGINS = [
     'https://meresa.vercel.app',     // Production Domain
     'https://meresa-portfolio-git-feature-x.vercel.app', // Example Staging Domain
     /https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/, // Allows ALL Vercel preview/staging subdomains
+    /^https:\/\/[a-zA-Z0-9-]+-\d+\.app\.github\.dev$/, // GitHub Codespaces forwarded ports
 ];
 
 app.use(cors({

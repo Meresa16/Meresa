@@ -14,19 +14,27 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onImageClick }) => {
   return (
     <motion.div 
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col h-full transform hover:-translate-y-1 transition-transform duration-300"
+      whileHover={{ y: -6, rotateX: 2, rotateY: 1 }}
+      transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+      style={{ transformPerspective: 1000 }}
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col h-full"
     >
       {/* Image Section - Now Clickable for Zoom */}
-      <div className="relative cursor-pointer group" onClick={onImageClick}>
-        <img src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover" />
+      <button
+        type="button"
+        aria-label={`View larger image for ${project.title}`}
+        className="group relative block w-full cursor-zoom-in text-left"
+        onClick={onImageClick}
+      >
+        <img src={project.imageUrl} alt={project.title} className="h-48 w-full object-cover" />
         {/* Overlay for Visual Cue */}
-        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-            <Maximize className="text-white" size={32} />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
+          <Maximize className="text-white" size={32} />
         </div>
-        <div className="absolute top-0 right-0 bg-indigo-600 text-white text-xs px-3 py-1 rounded-bl-lg font-semibold">
+        <span className="absolute right-0 top-0 rounded-bl-lg bg-indigo-600 px-3 py-1 text-xs font-semibold text-white">
           {project.type}
-        </div>
-      </div>
+        </span>
+      </button>
       
       {/* Content Section */}
       <div className="p-6 flex-grow flex flex-col justify-between">

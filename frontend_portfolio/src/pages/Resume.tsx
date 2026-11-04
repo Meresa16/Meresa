@@ -7,6 +7,7 @@ export default function Resume() {
 
   const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
   const viewUrl = `https://drive.google.com/file/d/${fileId}/view?usp=sharing`;
+  const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
 
   return (
     <div className="pt-24 h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
@@ -18,7 +19,7 @@ export default function Resume() {
       >
         <div className="mb-4 md:mb-0 text-center md:text-left">
           <h1 className="text-xl font-bold text-gray-800 dark:text-white">My Resume</h1>
-          <p className="text-xl text-gray-900 dark:text-gray-400 text-center">Cyber Data Analyst | Data Scientist | Data Warehouse & Analytics | Software & Database Development</p>
+          <p className="mt-1 max-w-3xl text-sm text-gray-600 dark:text-gray-400 text-center md:text-left">Cyber data analytics · Data science · Data warehousing · Software development</p>
         </div>
 
         <div className="flex space-x-4">
@@ -34,12 +35,12 @@ export default function Resume() {
 
          
           <a
-            href={viewUrl}
+            href={downloadUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-sm"
           >
-            <Download size={18} className="mr-2" /> Download / Print
+            <Download size={18} className="mr-2" /> Download Resume
           </a>
         </div>
       </motion.div>

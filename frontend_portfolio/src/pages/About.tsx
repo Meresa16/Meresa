@@ -66,12 +66,12 @@ export default function About() {
   const specialties = [
     {
       title: "Cyber Data Analytics",
-      description: "Build ETL pipelines and developing rule-based for financial fraud detection.",
+      description: "Apply data analysis and rule-based methods to support financial fraud monitoring.",
       icon: <Shield className="text-purple-500 w-5 h-5" />
     },
     {
       title: "Data Engineering",
-      description: "Designing data warehouses model and ETL pipelines.",
+      description: "Design data warehouse models and build ETL pipelines.",
       icon: <Database className="text-blue-500 w-5 h-5" />
     },
     {
@@ -119,26 +119,32 @@ export default function About() {
             </h2>
             
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6 text-justify">
-              With over 8+ years of hands-on experience, 
-              I specialize in the full data lifecycle from building ETL pipelines to deploying predictive models. 
-              My background spans across three core pillars:
+              With 8+ years of experience across data and software roles, I work throughout the
+              data lifecycle—from integrating and modeling data to building analytics and
+              predictive solutions. My work spans three areas:
             </p>
 
             {/* Structured Specialties List */}
             <ul className="space-y-4">
-              {specialties.map((item, index) => (
-                <li key={index} className="flex items-start gap-3 bg-white/30 dark:bg-white/5 p-3 rounded-xl border border-white/20">
+              {specialties.map((item) => (
+                <motion.li
+                  key={item.title}
+                  whileHover={{ y: -3, rotateX: 2, rotateY: -1 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                  style={{ transformPerspective: 800 }}
+                  className="flex items-start gap-3 rounded-xl border border-white/20 bg-white/30 p-3 dark:bg-white/5"
+                >
                   <span className="mt-1">{item.icon}</span>
                   <p className="text-gray-700 dark:text-gray-300">
                     <strong className="text-gray-900 dark:text-white">{item.title}:</strong> {item.description}
                   </p>
-                </li>
+                </motion.li>
               ))}
             </ul>
           </motion.div>
         </div>
 
-        {/* Verified Digital Presence Section */}
+        {/* Certifications and badges */}
         <motion.div
           variants={credentialsVariants}
           initial="hidden"
@@ -150,10 +156,10 @@ export default function About() {
               <ShieldCheck className="w-14 h-14" />
             </div>
 
-            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Verified Digital Credentials</h3>
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Certifications &amp; Badges</h3>
 
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed text-base">
-              Explore my verified certifications and badges showcasing expertise in Data Science, Cybersecurity, and Analytics.
+              Explore my professional certifications and badges in data science, cybersecurity, and analytics.
             </p>
 
             <motion.a

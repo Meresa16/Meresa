@@ -1,27 +1,27 @@
 import { motion } from 'framer-motion';
-import { Code, Database, Server, Terminal } from 'lucide-react';
+import { BarChart3, BrainCircuit, Server, Workflow } from 'lucide-react';
 
 export default function Skills() {
   const skillCategories = [
     {
-      title: "Data Analysis & Visualization",
-      icon: <Database size={24} />,
-      skills: [ "SQL","Python", "Excel", ]
+      title: "Data Analytics & BI",
+      icon: <BarChart3 size={24} />,
+      skills: ["SQL", "Excel", "Power BI"]
     },
     {
-      title: "Data Engineering & Big Data",
+      title: "Data Engineering",
       icon: <Server size={24} />,
-      skills: ["ETL Pipelines", "Data Warehousing", "Apache Spark", "Apache Kafka", "Apache Nifi", "Oracle", "MongoDB"]
+      skills: ["ETL Pipelines", "Data Warehousing", "Apache Spark", "Apache Kafka", "Apache NiFi", "Oracle", "MongoDB"]
     },
     {
-      title: " Data Science & ML",
-      icon: <Code size={24} />,
+      title: "Data Science & Machine Learning",
+      icon: <BrainCircuit size={24} />,
       skills: ["TensorFlow", "Scikit-learn", "Predictive Modeling"]
     },
     {
-      title: "Programming ",
-      icon: <Terminal size={24} />,
-      skills: ["JavaScript", "Docker", "Git" ]
+      title: "Programming & Delivery",
+      icon: <Workflow size={24} />,
+      skills: ["Python", "Java", "JavaScript", "Docker", "Git"]
     }
   ];
 
@@ -47,7 +47,7 @@ export default function Skills() {
       >
         <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">Technical Skills</h1>
         <p className="text-gray-600 dark:text-gray-200 max-w-4xl mx-auto leading-relaxed text-lg">
-         Leveraging a diverse and powerful toolkit to tackle complex data challenges, build robust systems, and drive impactful insights.
+          Tools and technologies I use across analytics, data platforms, machine learning, and software delivery.
 
         </p>
       </motion.div>
@@ -62,6 +62,9 @@ export default function Skills() {
           <motion.div 
             key={idx} 
             variants={itemVariants}
+            whileHover={{ y: -5, rotateX: 2, rotateY: idx % 2 === 0 ? 1 : -1 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+            style={{ transformPerspective: 900 }}
             className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center mb-4">
@@ -87,9 +90,6 @@ export default function Skills() {
     </div>
   );
 }
-
-
-
 
 
 
