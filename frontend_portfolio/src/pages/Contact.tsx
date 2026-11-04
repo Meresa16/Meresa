@@ -1,33 +1,33 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Send, Phone, Mail, MapPin } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowUpRight, Mail, MapPin, Phone, Send } from 'lucide-react';
 
-// --- Animation Variants ---
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1, // Stagger children animations
-    },
+const contactDetails = [
+  {
+    label: 'Email',
+    value: 'meresagidey0938@gmail.com',
+    href: 'mailto:meresagidey0938@gmail.com',
+    icon: Mail,
   },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
-  visible: { opacity: 1, y: 0, scale: 1 },
-};
+  {
+    label: 'Phone',
+    value: '+251 938 140 959',
+    href: 'tel:+251938140959',
+    icon: Phone,
+  },
+];
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const prefersReducedMotion = useReducedMotion();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setFormData((previous) => ({ ...previous, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const subject = encodeURIComponent(`Portfolio message from ${formData.name.trim()}`);
     const body = encodeURIComponent(
       `${formData.message.trim()}\n\nReply to: ${formData.email.trim()}`
@@ -36,285 +36,163 @@ export default function Contact() {
   };
 
   return (
-    <div className="container mx-auto px-6 py-20"> {/* Increased padding */}
-      <motion.h1
-        variants={itemVariants} // Use itemVariants for consistency
-        initial="hidden"
-        animate="visible"
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="text-5xl font-extrabold text-center mb-16 text-gray-800 tracking-tight dark:text-white" // Larger, bolder title
-      >
-        Let's Connect
-      </motion.h1>
+    <div className="relative isolate min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-indigo-50 px-6 py-24 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950">
+      <div aria-hidden="true" className="pointer-events-none absolute -left-36 top-16 -z-10 h-96 w-96 rounded-full bg-indigo-400/10 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -bottom-36 -right-20 -z-10 h-[28rem] w-[28rem] rounded-full bg-cyan-400/10 blur-3xl" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start dark:text-white"> {/* Increased gap, align items start */}
-        
-        {/* Contact Info Section */}
-        <motion.div 
-          variants={containerVariants} // Use container for staggering children
-          initial="hidden"
-          animate="visible"
+      <div className="mx-auto max-w-6xl">
+        <motion.header
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mb-14 text-center"
         >
-          <motion.h2 
-            variants={itemVariants} 
-            className="text-3xl font-bold text-gray-700 mb-8 dark:text-white" // Bolder subtitle
-          >
-            Get in Touch
-          </motion.h2>
-          <div className="space-y-8 text-gray-700 dark:text-white"> {/* Slightly darker text, more spacing */}
-            
-            {/* Email */}
-            <motion.a 
-              href="mailto:meresagidey0938@gmail.com" 
-              className="flex items-center group cursor-pointer" 
-              whileHover={{ x: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center mr-5 shadow-md transition-all duration-300 group-hover:bg-indigo-600 group-hover:shadow-lg">
-                <Mail className="text-indigo-600 size-7 transition-colors duration-300 group-hover:text-white" />
-              </div>
-              <span className="text-xl font-medium transition-colors duration-300 group-hover:text-indigo-600">meresagidey0938@gmail.com</span>
-            </motion.a>
-            
-            {/* Phone */}
-            <motion.a 
-              href="tel:+251938140959" 
-              className="flex items-center group cursor-pointer" 
-              whileHover={{ x: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center mr-5 shadow-md transition-all duration-300 group-hover:bg-indigo-600 group-hover:shadow-lg">
-                <Phone className="text-indigo-600 size-7 transition-colors duration-300 group-hover:text-white" />
-              </div>
-              <span className="text-xl font-medium transition-colors duration-300 group-hover:text-indigo-600">+251 938 140 959</span>
-            </motion.a>
-            
-            {/* Location */}
-            <motion.div 
-              className="flex items-center" 
-              variants={itemVariants}
-              whileHover={{ x: 5 }}
-            >
-              <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center mr-5 shadow-md">
-                <MapPin className="text-indigo-600 size-7" />
-              </div>
-              <span className="text-xl font-medium">Addis Ababa, Ethiopia</span>
-            </motion.div>
-          </div>
-        </motion.div>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">
+            Get in touch
+          </p>
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+            Let&apos;s start a conversation
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-gray-600 dark:text-gray-300">
+            Have a role, project, or question in mind? Send me a note and I&apos;ll be glad to connect.
+          </p>
+        </motion.header>
 
-        {/* Form Section */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.h2 
-            variants={itemVariants} 
-            className="text-3xl font-bold text-gray-700 mb-8 dark:text-white"
+        <div className="grid items-start gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+          <motion.aside
+            initial={prefersReducedMotion ? false : { opacity: 0, x: -24, rotateY: 4 }}
+            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
+            style={{ transformPerspective: 1100 }}
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-900 p-8 text-white shadow-2xl shadow-indigo-950/20 sm:p-10"
           >
-            Send Me a Message
-          </motion.h2>
-          <form onSubmit={handleSubmit} className="space-y-2 bg-white dark:bg-gray-800 dark:text-white p-2 rounded-xl shadow-xl border-t-4 border-indigo-500 transition-shadow duration-300 hover:shadow-2xl focus-within:shadow-2xl">
-            <p className="px-3 pt-2 text-sm text-gray-600 dark:text-gray-300">
-              Submitting opens your default email app with your message ready to send.
+            <motion.div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full border border-white/10"
+              animate={prefersReducedMotion ? undefined : { rotate: 360, scale: [1, 1.08, 1] }}
+              transition={{ rotate: { duration: 36, repeat: Infinity, ease: 'linear' }, scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' } }}
+            />
+            <div className="relative">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur">
+                <Mail size={25} />
+              </span>
+              <h2 className="mt-8 text-2xl font-bold">Contact details</h2>
+              <p className="mt-3 max-w-sm leading-relaxed text-indigo-100">
+                The quickest way to reach me is by email. You can also call or send a message using the form.
+              </p>
+
+              <div className="mt-8 space-y-3">
+                {contactDetails.map(({ label, value, href, icon: Icon }) => (
+                  <motion.a
+                    key={label}
+                    href={href}
+                    whileHover={prefersReducedMotion ? undefined : { x: 4 }}
+                    className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.06] p-4 transition-colors hover:bg-white/[0.12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-indigo-100">
+                      <Icon size={20} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-xs font-medium uppercase tracking-wider text-indigo-200">{label}</span>
+                      <span className="mt-1 block break-all font-medium">{value}</span>
+                    </span>
+                    <ArrowUpRight size={17} className="shrink-0 text-indigo-200 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </motion.a>
+                ))}
+
+                <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-indigo-100">
+                    <MapPin size={20} />
+                  </span>
+                  <span>
+                    <span className="block text-xs font-medium uppercase tracking-wider text-indigo-200">Location</span>
+                    <span className="mt-1 block font-medium">Addis Ababa, Ethiopia</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.aside>
+
+          <motion.section
+            initial={prefersReducedMotion ? false : { opacity: 0, x: 24, rotateY: -3 }}
+            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.65, delay: prefersReducedMotion ? 0 : 0.1, ease: 'easeOut' }}
+            whileHover={prefersReducedMotion ? undefined : { y: -3, rotateX: 0.5 }}
+            style={{ transformPerspective: 1100 }}
+            className="rounded-3xl border border-gray-200/80 bg-white/85 p-6 shadow-xl shadow-slate-900/5 backdrop-blur-xl dark:border-white/10 dark:bg-gray-900/70 dark:shadow-black/10 sm:p-9"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Send a message</h2>
+            <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+              Fill out the form to open a pre-addressed email in your default mail app. You&apos;ll review and send it there.
             </p>
-            
-            {/* Name Input */}
-            <motion.div variants={itemVariants}>
-              <label htmlFor="name" className="block text-lg dark:bg-gray-800 font-semibold text-gray-700 mb-2 dark:text-white">Name</label>
-              <input 
-                type="text" 
-                id="name" 
-                name="name" 
-                value={formData.name} 
-                onChange={handleChange} 
-                className="w-full px-5 py-3 bg-gray-50 border border-gray-300 rounded-lg 
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                           transition-all duration-300 shadow-sm focus:shadow-md dark:bg-gray-800 dark:text-white" 
-                placeholder="Your Name"
-                required // Added for basic HTML5 validation
-              />
-            </motion.div>
 
-            {/* Email Input */}
-            <motion.div variants={itemVariants}>
-              <label htmlFor="email" className="block text-lg font-semibold text-gray-700 mb-2 dark:text-white">Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                value={formData.email} 
-                onChange={handleChange} 
-                className="w-full px-5 py-3 bg-gray-50 border border-gray-300 rounded-lg 
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                           transition-all duration-300 shadow-sm focus:shadow-md dark:bg-gray-800 dark:text-white" 
-                placeholder="your.email@example.com"
-                required
-              />
-            </motion.div>
+            <form onSubmit={handleSubmit} className="mt-7 space-y-5">
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="name" className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
+                    Your name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                    placeholder="Name"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
+                    Email address
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                    placeholder="you@example.com"
+                  />
+                </div>
+              </div>
 
-            {/* Message Textarea */}
-            <motion.div variants={itemVariants}>
-              <label htmlFor="message" className="block text-lg font-semibold text-gray-700 mb-2 dark:text-white">Message</label>
-              <textarea 
-                id="message" 
-                name="message" 
-                rows={5} // Slightly taller textarea
-                value={formData.message} 
-                onChange={handleChange} 
-                className="w-full px-5 py-3 bg-gray-50 border border-gray-300 rounded-lg 
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                           transition-all duration-300 shadow-sm focus:shadow-md resize-none dark:bg-gray-800 dark:text-white"
-                placeholder="write your message here..."
-                required
-              ></textarea>
-            </motion.div>
+              <div>
+                <label htmlFor="message" className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={6}
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className="w-full resize-y rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                  placeholder="How can I help?"
+                />
+              </div>
 
-            {/* Submit Button */}
-            <motion.div variants={itemVariants}>
-              <button 
-                type="submit" 
-                className="w-full inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg shadow-lg transition-all duration-300 bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-1"
+              <motion.button
+                type="submit"
+                whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+                whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:w-auto"
               >
-                Send Message <Send className="ml-3 size-5" />
-              </button>
-            </motion.div>
-          </form>
-        </motion.div>
+                Open email draft <Send size={17} />
+              </motion.button>
+            </form>
+          </motion.section>
+        </div>
       </div>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-// import { useState } from 'react';
-// import { motion } from 'framer-motion';
-// import { toast } from 'sonner';
-// import { Send, Phone, Mail, MapPin } from 'lucide-react';
-
-// export default function Contact() {
-//   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     // Basic form validation
-//     if (!formData.name || !formData.email || !formData.message) {
-//       return toast.error('Please fill out all fields.');
-//     }
-//     // Simulate form submission
-//     toast.success('Message sent successfully! I will get back to you soon.');
-//     setFormData({ name: '', email: '', message: '' });
-//   };
-
-//   return (
-//     <div className="container mx-auto px-6 py-12">
-//       <motion.h1
-//         initial={{ opacity: 0, y: -20 }}
-//         animate={{ opacity: 1, y: 0 }}
-//         transition={{ duration: 0.5 }}
-//         className="text-4xl font-bold text-center mb-12 text-gray-800"
-//       >
-//         Get In Touch
-//       </motion.h1>
-//       <div className="grid grid-cols-2 md:grid-cols-2 gap-12">
-        
-//         {/* Contact Info Section */}
-//         <motion.div 
-//           initial={{ opacity: 0, x: -50 }} 
-//           animate={{ opacity: 1, x: 0 }} 
-//           transition={{ duration: 0.5, delay: 0.2 }}
-//         >
-//           <h2 className="text-2xl font-semibold text-gray-700 mb-6">Contact Information</h2>
-//           <div className="space-y-6 text-gray-600">
-//             <a href="mailto:meresagidey0938@gmail.com" className="flex items-center hover:text-indigo-600 transition-colors">
-//               <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-//                 <Mail className="text-indigo-600" size={24} />
-//               </div>
-//               <span className="text-lg">meresagidey0938@gmail.com</span>
-//             </a>
-            
-//             <a href="tel:+251938140959" className="flex items-center hover:text-indigo-600 transition-colors">
-//               <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-//                 <Phone className="text-indigo-600" size={24} />
-//               </div>
-//               <span className="text-lg">+251 938 140 959</span>
-//             </a>
-            
-//             <div className="flex items-center">
-//               <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-//                 <MapPin className="text-indigo-600" size={24} />
-//               </div>
-//               <span className="text-lg">Addis Ababa, Ethiopia</span>
-//             </div>
-//           </div>
-//         </motion.div>
-
-//         {/* Form Section */}
-//         <motion.div 
-//           initial={{ opacity: 0, x: 50 }} 
-//           animate={{ opacity: 1, x: 0 }} 
-//           transition={{ duration: 0.5, delay: 0.4 }}
-//         >
-//           <h2 className="text-2xl font-semibold text-gray-700 mb-6">Send Me a Message</h2>
-//           <form onSubmit={handleSubmit} className="space-y-5 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-//             <div>
-//               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-//               <input 
-//                 type="text" 
-//                 id="name" 
-//                 name="name" 
-//                 value={formData.name} 
-//                 onChange={handleChange} 
-//                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" 
-//                 placeholder="Your Name"
-//               />
-//             </div>
-//             <div>
-//               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-//               <input 
-//                 type="email" 
-//                 id="email" 
-//                 name="email" 
-//                 value={formData.email} 
-//                 onChange={handleChange} 
-//                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" 
-//                 placeholder="your.email@example.com"
-//               />
-//             </div>
-//             <div>
-//               <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-//               <textarea 
-//                 id="message" 
-//                 name="message" 
-//                 rows={4} 
-//                 value={formData.message} 
-//                 onChange={handleChange} 
-//                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow resize-none"
-//                 placeholder="How can we work together?"
-//               ></textarea>
-//             </div>
-//             <button 
-//               type="submit" 
-//               className="w-full inline-flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
-//             >
-//               Send Message <Send className="ml-2" size={18} />
-//             </button>
-//           </form>
-//         </motion.div>
-//       </div>
-//     </div>
-//   );
-// }
