@@ -1,181 +1,176 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { BarChart3, Database, ExternalLink, MapPin, Shield, ShieldCheck, User } from 'lucide-react';
 
+const specialties = [
+  {
+    title: 'Cyber Analytics & Fraud Monitoring',
+    description: 'At Wegagen Bank, analyze data with statistical methods and rule based to support fraud and risk identification.',
+    icon: Shield,
+    accent: 'text-violet-600 dark:text-violet-300',
+    surface: 'bg-violet-100 dark:bg-violet-400/10',
+  },
+  {
+    title: 'Data Warehousing & Business Intelligence',
+    description: 'Design and maintain data warehouses, build ETL pipelines, and create Power BI dashboards and reports.',
+    icon: Database,
+    accent: 'text-cyan-700 dark:text-cyan-300',
+    surface: 'bg-cyan-100 dark:bg-cyan-400/10',
+  },
+  {
+    title: 'Software & Database Development',
+    description: 'At INSA, developed software with Python and Java, supported databases, and contributed across the software development lifecycle.',
+    icon: BarChart3,
+    accent: 'text-indigo-600 dark:text-indigo-300',
+    surface: 'bg-indigo-100 dark:bg-indigo-400/10',
+  },
+];
 
-
-
-
-
-
-
-
-
-
-
-import { motion, Variants } from 'framer-motion';
-import { User, ShieldCheck, ExternalLink, Database, Shield, BarChart3 } from 'lucide-react';
-
-const EASE_IN_OUT = [0.42, 0, 0.58, 1] as const; 
-
-const titleVariants: Variants = {
-  hidden: { opacity: 0, y: -20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_IN_OUT } } 
-};
-
-const profileImageVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.8, rotate: -5 },
-  animate: {
-    opacity: 1,
-    scale: 1,
-    rotate: 0,
-    transition: { 
-      duration: 0.7, 
-      ease: EASE_IN_OUT, // FIX: Ensured this is an array constant
-      delay: 0.2 
-    }
-  }
-};
-
-const profileTextVariants: Variants = {
-  hidden: { opacity: 0, x: 30 },
-  animate: { 
-    opacity: 1, 
-    x: 0, 
-    transition: { 
-      duration: 0.7, 
-      ease: EASE_IN_OUT, // FIX: Ensured this is an array constant
-      delay: 0.3 
-    } 
-  }
-};
-
-const credentialsVariants: Variants = {
-  hidden: { opacity: 0, y: 20, scale: 0.98 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { 
-      duration: 0.6, 
-      ease: EASE_IN_OUT, // FIX: Ensured this is an array constant
-      delay: 0.4 
-    }
-  }
+const riseIn = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
 };
 
 export default function About() {
-  // Structured data for better UI rendering
-  const specialties = [
-    {
-      title: "Cyber Data Analytics",
-      description: "Apply data analysis and rule-based methods to support financial fraud monitoring.",
-      icon: <Shield className="text-purple-500 w-5 h-5" />
-    },
-    {
-      title: "Data Engineering",
-      description: "Design data warehouse models and build ETL pipelines.",
-      icon: <Database className="text-blue-500 w-5 h-5" />
-    },
-    {
-      title: "Business Intelligence",
-      description: "Crafting interactive dashboards that translate complex datasets into clear strategic roadmaps.",
-      icon: <BarChart3 className="text-indigo-500 w-5 h-5" />
-    }
-  ];
+  const prefersReducedMotion = useReducedMotion();
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-blue-100 dark:from-gray-900 dark:to-blue-950 min-h-screen py-24 px-6">
-      
-      <motion.div
-        variants={titleVariants}
-        initial="hidden"
-        animate="animate"
-        className="max-w-5xl mx-auto"
-      >
-        <h1 className="text-5xl md:text-6xl font-extrabold text-center mb-16 text-gray-900 dark:text-white tracking-tight leading-tight">
-          About Meresa Gidey
-        </h1>
+    <div className="relative isolate min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 px-6 py-24 dark:from-gray-950 dark:via-slate-900 dark:to-indigo-950">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-20 -z-10 h-96 w-96 rounded-full bg-indigo-400/15 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -bottom-28 -left-24 -z-10 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
 
-        {/* Profile Section */}
-        <div className="flex flex-col md:flex-row gap-12 items-center mb-20">
-          
-          {/* Variants must be correctly defined */}
-          <motion.div variants={profileImageVariants} initial="hidden" animate="animate" className="flex-shrink-0">
-            <motion.img
-              src="/profile.jpg" 
-              alt="Meresa Gidey"
-              className="w-64 h-64 rounded-full object-cover shadow-xl border-8 border-white/50 dark:border-gray-800/50 bg-gray-200 transition-all duration-300 hover:shadow-2xl hover:scale-105"
-              whileHover={{ rotate: 2, scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-            />
+      <div className="mx-auto max-w-6xl">
+        <motion.header
+          variants={riseIn}
+          initial={prefersReducedMotion ? false : 'hidden'}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mb-14 text-center"
+        >
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">
+            About me
+          </p>
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+            About Meresa Gidey
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-gray-600 dark:text-gray-300">
+            I am a data professional with 8+ years of experience across cyber data analytics,
+            data warehousing, business intelligence, and software development.
+          </p>
+        </motion.header>
+
+        <div className="grid items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, x: -24, rotateY: 8 }}
+            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.75, ease: 'easeOut' }}
+            style={{ transformPerspective: 1000 }}
+            className="mx-auto w-full max-w-sm"
+          >
+            <motion.div
+              whileHover={prefersReducedMotion ? undefined : { y: -6, rotateY: 3, rotateX: -2 }}
+              transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+              style={{ transformPerspective: 1000 }}
+              className="relative rounded-[2rem] border border-white/70 bg-white/70 p-4 shadow-2xl shadow-indigo-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5 dark:shadow-black/20"
+            >
+              <div className="overflow-hidden rounded-[1.5rem]">
+                <img
+                  src="/profile.jpg"
+                  alt="Portrait of Meresa Gidey"
+                  className="aspect-[4/5] w-full object-cover"
+                />
+              </div>
+              <div className="flex items-center justify-between gap-4 px-2 pb-1 pt-5">
+                <div>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">Meresa Gidey</p>
+                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">Cyber Data Analytics · Data Science</p>
+                </div>
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-300">
+                  <User size={21} />
+                </span>
+              </div>
+              <div className="mt-3 flex items-center gap-2 px-2 pb-2 text-sm text-gray-500 dark:text-gray-400">
+                <MapPin size={16} className="text-indigo-500 dark:text-indigo-300" />
+                Addis Ababa, Ethiopia
+              </div>
+            </motion.div>
           </motion.div>
 
-          <motion.div
-            variants={profileTextVariants}
-            initial="hidden"
-            animate="animate"
-            className="flex-1"
+          <motion.section
+            initial={prefersReducedMotion ? false : 'hidden'}
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ staggerChildren: prefersReducedMotion ? 0 : 0.12 }}
+            className="space-y-6"
+            aria-labelledby="about-experience"
           >
-            <h2 className="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-5 flex items-center justify-center md:justify-start">
-              <User className="mr-3 size-8" /> Data Professional 
-            </h2>
-            
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6 text-justify">
-              With 8+ years of experience across data and software roles, I work throughout the
-              data lifecycle—from integrating and modeling data to building analytics and
-              predictive solutions. My work spans three areas:
-            </p>
+            <motion.div variants={riseIn} transition={{ duration: 0.55, ease: 'easeOut' }}>
+              <h2 id="about-experience" className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+                My professional background
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg">
+                Since 2022, I have held cyber data analytics and data warehouse and analytics
+                roles at Wegagen Bank S.C. Earlier, from 2018 to 2022, I worked at the
+                Information Network Security Administration (INSA) in application software
+                development and database and data warehousing. This experience connects data
+                analysis with the systems and platforms behind it.
+              </p>
+            </motion.div>
 
-            {/* Structured Specialties List */}
-            <ul className="space-y-4">
-              {specialties.map((item) => (
+            <ul className="grid gap-4">
+              {specialties.map(({ title, description, icon: Icon, accent, surface }) => (
                 <motion.li
-                  key={item.title}
-                  whileHover={{ y: -3, rotateX: 2, rotateY: -1 }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                  style={{ transformPerspective: 800 }}
-                  className="flex items-start gap-3 rounded-xl border border-white/20 bg-white/30 p-3 dark:bg-white/5"
+                  key={title}
+                  variants={riseIn}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  whileHover={prefersReducedMotion ? undefined : { y: -4, rotateX: 2, rotateY: -1 }}
+                  style={{ transformPerspective: 900 }}
+                  className="flex items-start gap-4 rounded-2xl border border-white/70 bg-white/75 p-5 shadow-lg shadow-slate-900/5 backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:shadow-black/10"
                 >
-                  <span className="mt-1">{item.icon}</span>
-                  <p className="text-gray-700 dark:text-gray-300">
-                    <strong className="text-gray-900 dark:text-white">{item.title}:</strong> {item.description}
-                  </p>
+                  <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${surface} ${accent}`}>
+                    <Icon size={22} />
+                  </span>
+                  <span>
+                    <span className="block font-semibold text-gray-900 dark:text-white">{title}</span>
+                    <span className="mt-1 block text-sm leading-relaxed text-gray-600 dark:text-gray-300">{description}</span>
+                  </span>
                 </motion.li>
               ))}
             </ul>
-          </motion.div>
+          </motion.section>
         </div>
 
-        {/* Certifications and badges */}
-        <motion.div
-          variants={credentialsVariants}
-          initial="hidden"
-          animate="animate"
-          className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg dark:backdrop-blur-xl p-12 rounded-3xl border border-indigo-200 dark:border-indigo-800 text-center shadow-lg"
+        <motion.section
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 24, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.65, ease: 'easeOut' }}
+          whileHover={prefersReducedMotion ? undefined : { y: -4, rotateX: 1 }}
+          style={{ transformPerspective: 1100 }}
+          className="mt-16 overflow-hidden rounded-3xl border border-indigo-200/70 bg-white/70 p-8 text-center shadow-xl shadow-indigo-950/5 backdrop-blur-xl dark:border-indigo-300/10 dark:bg-white/5 dark:shadow-black/10 sm:p-12"
         >
-          <div className="flex flex-col items-center">
-            <div className="bg-gradient-to-br from-indigo-400 to-blue-500 text-white p-5 rounded-xl shadow-lg mb-7 flex items-center justify-center">
-              <ShieldCheck className="w-14 h-14" />
-            </div>
-
-            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Certifications &amp; Badges</h3>
-
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed text-base">
-              Explore my professional certifications and badges in data science, cybersecurity, and analytics.
-            </p>
-
-            <motion.a
-              href="https://www.credly.com/users/meresa-gidey/badges"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05, boxShadow: "0px 8px 20px rgba(90, 50, 200, 0.4)" }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center px-10 py-4 bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-indigo-700 hover:to-blue-800 text-white font-bold rounded-full shadow-lg transition-all duration-300 ease-out"
-            >
-              View My Credly Badges <ExternalLink size={20} className="ml-3" />
-            </motion.a>
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white shadow-lg shadow-indigo-500/25">
+            <ShieldCheck size={32} />
           </div>
-        </motion.div>
-
-      </motion.div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+            Certifications &amp; badges
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl leading-relaxed text-gray-600 dark:text-gray-300">
+            View my professional credentials in data science, cybersecurity, and analytics.
+          </p>
+          <motion.a
+            href="https://www.credly.com/users/meresa-gidey/badges"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={prefersReducedMotion ? undefined : { y: -2, scale: 1.02 }}
+            whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+            className="mt-7 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            View Credly badges <ExternalLink size={18} />
+          </motion.a>
+        </motion.section>
+      </div>
     </div>
   );
 }
