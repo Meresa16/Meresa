@@ -66,7 +66,7 @@ export default function About() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.75, ease: 'easeOut' }}
             style={{ transformPerspective: 1000 }}
-            className="mx-auto w-full max-w-sm"
+            className="mx-auto w-full max-w-md"
           >
             <motion.div
               whileHover={prefersReducedMotion ? undefined : { y: -6, rotateY: 3, rotateX: -2 }}
@@ -78,7 +78,7 @@ export default function About() {
                 <img
                   src="/profile.jpg"
                   alt="Portrait of Meresa Gidey"
-                  className="aspect-[4/5] w-full object-cover"
+                  className="aspect-[4/5] w-full object-cover object-[center_30%]"
                 />
               </div>
               <div className="flex items-center justify-between gap-4 px-2 pb-1 pt-5">
